@@ -113,13 +113,13 @@ AR,        *ARC
 B,         *BLOCK
 BH,        *HATCH
 BR,        *BREAK
-C,         *CIRCLE
+;C,         *COPY
 CAM,       *CAMERA
 CH,        *CHANGE
 CHA,       *CHAMFER
 COL,       *COLOR
 CR,        *CIRCLE
-D,         *DIMSTYLE
+;D,         *DIMSTYLE
 DAL,       *DIMALIGNED
 DAN,       *DIMANGULAR
 DAR,       *DIMARC
@@ -371,8 +371,6 @@ SHOWMAT,   *LIST
 RFILEOPT,  *RENDERPRESETS
 RENDSCR,   *RENDERWIN
 
-
-
 ;  -- User Defined Command Aliases --
 ;  Make any changes or additions to the default AutoCAD command aliases in 
 ;  this section to ensure successful migration of these settings when you
@@ -387,7 +385,7 @@ VS,      *BVSTATE
 
 CC,		*COPY
 VV,		*VPMAX
-DD,		*DIMLINEAR
+D,		*DIMLINEAR
 DA,		*DIMALIGNED
 DG,		*DIMANGULAR
 LL,		*LAYMCUR
@@ -404,3 +402,7 @@ OO,		*OLEOPEN
 CS,		*UCS
 DDV,		*DIVIDE
 DRD,		*DIMORDINATE
+C,		*CIRCLE
+LI,		*LAYISO
+LU,		*LAYUNISO
+MM,		*MODEL
