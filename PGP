@@ -383,6 +383,8 @@ VS,      *BVSTATE
 
 ; Customized by Ed Yother
 
+; Customized by Ed Yother
+
 CC,		*COPY
 VV,		*VPMAX
 D,		*DIMLINEAR
@@ -406,3 +408,7 @@ C,		*CIRCLE
 LI,		*LAYISO
 LU,		*LAYUNISO
 MM,		*MODEL
+LF,		*LAYOFF
+RE,		*REFEDIT
+RS,		*REFSET
+RC,		*REFCLOSE
