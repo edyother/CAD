@@ -113,13 +113,13 @@ AR,        *ARC
 B,         *BLOCK
 BH,        *HATCH
 BR,        *BREAK
-;C,         *COPY
+C,         *COPY
 CAM,       *CAMERA
 CH,        *CHANGE
 CHA,       *CHAMFER
 COL,       *COLOR
 CR,        *CIRCLE
-;D,         *DIMSTYLE
+D,         *DIMSTYLE
 DAL,       *DIMALIGNED
 DAN,       *DIMANGULAR
 DAR,       *DIMARC
@@ -380,9 +380,6 @@ RENDSCR,   *RENDERWIN
 ;  **********----------**********  ; No xlate ; DO NOT REMOVE
 
 VS,      *BVSTATE
-
-; Customized by Ed Yother
-
 ; Customized by Ed Yother
 
 CC,		*COPY
@@ -412,3 +409,6 @@ LF,		*LAYOFF
 RE,		*REFEDIT
 RS,		*REFSET
 RC,		*REFCLOSE
+RET,		*RETURNTOWORLD
+PP,		*PLAN
+VC,		*VPCLIP
