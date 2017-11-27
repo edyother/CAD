@@ -148,7 +148,7 @@ DT,        *TEXT
 DV,        *DVIEW
 DX,        *DATAEXTRACTION
 E,         *ERASE
-ED,        *DDEDIT
+ED,        *TEXTEDIT
 EL,        *ELLIPSE
 EP,        *EXPLODE
 ER,        *EXTERNALREFERENCES
