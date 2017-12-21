@@ -27,3 +27,9 @@
 
 ;PURGE BLOCKS NAMED XX
 (DEFUN C:PX()(COMMAND "-PURGE" "BLOCKS" "XX" "N")(PRINC))
+
+;LOCK ALL VIEWPORTS IN ALL PAGE LAYOUTS
+(DEFUN C:LOCKVP()(foreach layout(layoutlist)(setvar "ctab" layout)(COMMAND "-VPORTS" "LOCK" "ON" "ALL" ""))(PRINC))
+
+;UNLOCK ALL VIEWPORTS IN ALL PAGE LAYOUTS
+(DEFUN C:ULOCKVP()(foreach layout(layoutlist)(setvar "ctab" layout)(COMMAND "-VPORTS" "LOCK" "OFF" "ALL" ""))(PRINC))
