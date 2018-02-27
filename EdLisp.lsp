@@ -54,11 +54,11 @@
 ;SET PDMODE TO "3"
 (DEFUN C:P3()(COMMAND "PDMODE" "3")(PRINC))
 
-;SET IMAGEFRAME TO "0"
-(DEFUN C:I0()(COMMAND "IMAGEFRAME" "0")(PRINC))
+;SET IMAGEFRAME TO "0" and show plot preview
+(DEFUN C:I0()(COMMAND "IMAGEFRAME" "0")(command "preview")(PRINC))
 
-;SET IMAGEFRAME TO "2"
-(DEFUN C:I2()(COMMAND "IMAGEFRAME" "2")(PRINC))
+;SET IMAGEFRAME TO "2" and show plot preview
+(DEFUN C:I2()(COMMAND "IMAGEFRAME" "2")(command "preview")(PRINC))
 
 ;DUPLICATE SELECTED OBJECT IS SAME LOCATION
 ;(DEFUN C:DP()(COMMAND "COPYBASE" "0,0,0")(COMMAND "PASTECLIP" "0,0,0")(PRINC))
@@ -66,7 +66,5 @@
 ;ZOOM EXTENTS, SAVE AND CLOSE
 (DEFUN C:ZEC()(COMMAND "ZOOM" "EXTENTS" "QSAVE" "CLOSE")(PRINC))
 
-;(foreach layout(layoutlist)(setvar "ctab" layout)(command "circle" "0,0,0" "6"))(princ)
-
-;CHANGE "REVISION" LAYER TO COLOR 240
-;(COMMAND "-LAYER" "COLOR" "240" "REVISION" "")
+;change "UCS" to "World" and rotate view to match
+(defun c:RET()(command "ucs" "world")(command "plan" "current")(princ))
