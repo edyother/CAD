@@ -1,3 +1,16 @@
+(defun c:colorchange (/ c1 c2 )
+    (vl-load-com)
+    (setq c1 (getint " What is the original color: ") c2 (getint " What is the new color: "))
+    (vlax-for layer (vla-get-Layers (vla-get-ActiveDocument (vlax-get-Acad-Object)))(if (= c1 (vla-get-Color layer))(vla-put-Color layer c2)))
+    (prin1)
+) 
+
+(command "pdmode" "0")
+
+;(command "model" "zoom" "extents")(princ)
+
+;(command "-layer" "new" "01-Delete" "color" "red" "01-Delete" "freeze" "01-Delete" "plot" "no" "01-Delete" "")(princ)
+
 ;ZOOM TO 24X36 SHEET
 (DEFUN C:ZS()(COMMAND "ZOOM" "0,0,0" "@36,24")(PRINC))
 
@@ -68,3 +81,6 @@
 
 ;change "UCS" to "World" and rotate view to match
 (defun c:RET()(command "ucs" "world")(command "plan" "current")(princ))
+
+;CLOSE WITHOUT SAVING
+(DEFUN C:CN()(COMMAND "_CLOSE" "_Y")(princ))
