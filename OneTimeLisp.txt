@@ -1,10 +1,15 @@
 (command "vplayer" "freeze" "xbase 3|E-FENCE,xbase 3|p-roof,xbase 3|P-GUTTER,xbase 3|E-GUTTER,xbase 3|E-ROOF,xbase 3|E-GUTTER-OFF,xbase 3|E-ROOF-OFF,xbase 3|E-RIDGE,xbase 3|P-PIPE,xbase 3|r-demo-mech,xbase 3|P-SANITARY,xbase 3|e-flex,xbase 3|p-cl,xbase 3|P-COL#" "all" "")
 
+
 (command "vplayer" "freeze" "*revision*,*e-flex*,*sanitary*,*pipe*,*ductwork*,*p-clg*,*p-mech*,*r-demo-mech*,*p-cl*,*p-col#*,*ada*,*e-clg*,*E-FTG*,*E-WALL-BELOW*" "all" "")(princ)
 
 (command "-layer" "color" "240" "REV" "")(princ)
 
+(command "-layer" "color" "8" "*|*" "")(princ)
+
 (command "-layer" "color" "251" "*|*" "")(princ)
+
+(command "xrefoverride" "1")(command "-layer" "color" "250" "*|*" "")(princ)
 
 (command "-layer" "color" "8" "*|*" "color" "80" "*e-lite-fixt" "")(princ)
 
@@ -144,13 +149,15 @@
 
 (command "-layer" "color" "240" "*f-FIRE panel n" "")(princ)
 
-(command "vplayer" "freeze" "g-anno-nplt" "all" "")(foreach layout(layoutlist)(setvar "ctab" layout)(command "vplayer" "thaw" "g-anno-nplt" "current" ""))(princ)
+(command "vplayer" "freeze" "*g-anno-nplt" "all" "")(foreach layout(layoutlist)(setvar "ctab" layout)(command "vplayer" "thaw" "g-anno-nplt" "current" ""))(princ)
 
 (foreach layout(layoutlist)(setvar "ctab" layout)(command "vplayer" "thaw" "g-anno-nplt" "current" ""))(princ)
 
 (command "-layer" "color" "250" "*a-wall-intr" "")(princ)
 
 (command "-layer" "color" "250" "*strs*" "")(princ)
+
+E-
 
 (command "vplayer" "freeze" "*visual*" "all" "")(princ)
 
@@ -161,6 +168,8 @@
 (foreach layout(layoutlist)(setvar "ctab" layout)(COMMAND "_SCRIPT" "PlotSettings.scr"))(PRINC)
 
 (command "-layer" "new" "E-POWR-EQPM-N-D_4" "color" "210" "E-POWR-EQPM-N-D_4" "")(princ)
+
+(command "-layer" "new" "E-POWR-CIRC-NUMB" "color" "80" "E-POWR-CIRC-NUMB" "")(princ)
 
 (command "-layer" "new" "E-POWR-CIRC-NUMB_4" "color" "80" "E-POWR-CIRC-NUMB_4" "")(princ)
 
@@ -177,3 +186,28 @@
 (command "-layer" "new" "E-POWR-EQPM-N-D" "color" "210" "E-POWR-EQPM-N-D" "")(princ)
 
 (command "-layer" "color" "210" "*E-POWR-EQPM-N-D" "color" "240" "*e-fire-eq*" "")(princ)
+
+(command "wipeoutframe" "0")
+
+(command "-layer" "color" "cyan" "a-area-spce-iden" "")(princ)
+
+(command "vplayer" "freeze" "*A-CLNG-GYPB*" "all" "")(princ)
+
+(command "vplayer" "freeze" "*A-PATT-160*" "all" "")(princ)
+
+(command "-layer" "color" "8" "*fire*" "")(princ)
+
+;zoom to revision list
+(command "zoom" "31.85,3.48" "35.6,6.4")(princ)
+
+(command "vplayer" "freeze" "defpoints" "all" "")(foreach layout(layoutlist)(setvar "ctab" layout)(command "vplayer" "thaw" "defpoints" "current" ""))(princ)
+
+(command "vplayer" "freeze" "*a-flor-furn" "all" "")(princ)
+
+(command "vplayer" "freeze" "*p-fixt" "all" "")(princ)
+
+(command "vplayer" "freeze" "*p-fixt" "all" "")(command "vplayer" "freeze" "*a-flor-furn" "all" "")(command "vplayer" "freeze" "*a-elev-red" "all" "")(command "vplayer" "freeze" "*a-flor-pfix" "all" "")(princ)
+
+(command "vplayer" "freeze" "*p-fixt" "current" "")(command "vplayer" "freeze" "*a-flor-furn" "current" "")(command "vplayer" "freeze" "*a-elev-red" "current" "")(command "vplayer" "freeze" "*a-flor-pfix" "current" "")(princ)
+
+(command "vplayer" "freeze" "defpoints" "all" "")(foreach layout(layoutlist)(setvar "ctab" layout)(command "vplayer" "thaw" "defpoints" "current" ""))(princ)
