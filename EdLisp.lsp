@@ -85,7 +85,8 @@
 ;CLOSE WITHOUT SAVING
 (DEFUN C:CN()(COMMAND "_CLOSE" "_Y")(princ))
 
-;PASTECLIP AT 0,0,0 ON EACH PAGE LAYOUT
-(defun c:99()(foreach layout(layoutlist)(setvar "ctab" layout)(c:00))(c:zc)(PRINC))
+;PASTE WHATEVER IS IN CLIPBOARD AT 0,0,0 ON EACH PAGE LAYOUT
+(defun c:99()(foreach layout(layoutlist)(setvar "ctab" layout)(c:00))(PRINC))
 
+;PURGE AND SET UP NEW LAYERS FOR AS BUILT DRAWING
 (defun c:asbl()(command "-purge" "layers" "*" "no")(command "-layer" "new" "AB-WALL" "color" "80" "AB-WALL" "new" "AB-HALFWALL" "color" "240" "AB-HALFWALL" "LTYPE" "DASHED" "AB-HALFWALL" "")(command "clayer" "AB-WALL")(princ))
