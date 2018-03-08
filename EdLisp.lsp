@@ -12,7 +12,10 @@
 ;(command "-layer" "new" "01-Delete" "color" "red" "01-Delete" "freeze" "01-Delete" "plot" "no" "01-Delete" "")(princ)
 
 ;ZOOM TO 24X36 SHEET
-(DEFUN C:ZS()(COMMAND "ZOOM" "0,0,0" "@36,24")(PRINC))
+(DEFUN C:ZS()(COMMAND "ZOOM" "0,0,0" "36,24")(PRINC))
+
+;ZOOM TO 30X42 SHEET
+(DEFUN C:Z1()(COMMAND "ZOOM" "0,0,0" "42,30")(PRINC))
 
 ;RECONCILE ALL LAYERS
 (DEFUN C:LR()(COMMAND "-LAYER" "E" "*" "")(PRINC))
