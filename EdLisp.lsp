@@ -93,3 +93,15 @@
 
 ;PURGE AND SET UP NEW LAYERS FOR AS BUILT DRAWING
 (defun c:asbl()(command "-purge" "layers" "*" "no")(command "-layer" "new" "AB-WALL" "color" "80" "AB-WALL" "new" "AB-HALFWALL" "color" "240" "AB-HALFWALL" "LTYPE" "DASHED" "AB-HALFWALL" "")(command "clayer" "AB-WALL")(princ))
+
+(defun c:r9()(command "rotate" "all" "" "0,0,0" "90")(princ))
+
+(defun c:sue()(command "-purge" "layers" "*" "no")(command "-purge" "blocks" "*" "no")(command "insert" "ELEC common layers.dwg" "0,0,0" "1" "1" "0")(princ))
+
+;(command "zoom" "extents")(command "ucsicon" "origin")
+
+;(command "scale" "all" "" "0,0,0" "1.33")(c:zec)
+
+;(c:lockvp)(command "xrefoverride" "1")(command "-layer" "color" "8" "*|*" "")(princ)
+
+;(command "scale" "all" "" "0,0,0" "4")(c:zec)
