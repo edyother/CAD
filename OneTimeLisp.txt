@@ -211,3 +211,22 @@ E-
 (command "vplayer" "freeze" "*p-fixt" "current" "")(command "vplayer" "freeze" "*a-flor-furn" "current" "")(command "vplayer" "freeze" "*a-elev-red" "current" "")(command "vplayer" "freeze" "*a-flor-pfix" "current" "")(princ)
 
 (command "vplayer" "freeze" "defpoints" "all" "")(foreach layout(layoutlist)(setvar "ctab" layout)(command "vplayer" "thaw" "defpoints" "current" ""))(princ)
+
+(command "rotate" "all" "" "0,0,0" "90")(princ)
+
+(command "insert" "ELEC common layers.dwg" "0,0,0" "1" "1" "0")(princ)
+
+(command "-purge" "blocks" "KJG North Arrow" "no")(princ)
+
+(command "insert" "KJG North Arrow.dwg" "0,0,0" "1" "1" "0")(princ)
+
+(command "-purge" "blocks" "KJG North Arrow" "no")(command "insert" "KJG North Arrow.dwg" "0,0,0" "1" "0")(princ)
+
+;Scale from 1/4 to 1/8
+(command "scale" "all" "" "0,0,0" "2")(c:zec)
+
+;Scale from 1/8 to 1/4 
+(command "scale" "all" "" "0,0,0" ".5")(c:zec)
+
+;Scale from 1/4 to 3/16
+(command "scale" "all" "" "0,0,0" "1.33333")(c:zec)
