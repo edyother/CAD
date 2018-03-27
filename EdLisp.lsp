@@ -92,11 +92,20 @@
 (defun c:99()(foreach layout(layoutlist)(setvar "ctab" layout)(c:00))(PRINC))
 
 ;PURGE AND SET UP NEW LAYERS FOR AS BUILT DRAWING
-(defun c:asbl()(command "-purge" "layers" "*" "no")(command "-layer" "new" "AB-WALL" "color" "80" "AB-WALL" "new" "AB-HALFWALL" "color" "240" "AB-HALFWALL" "LTYPE" "DASHED" "AB-HALFWALL" "")(command "clayer" "AB-WALL")(princ))
+(defun c:asbl()(command "-purge" "layers" "*" "no")(command "-purge" "blocks" "*" "no")(command "-layer" "new" "AB-IMAGE" "new" "AB-WALL" "color" "80" "AB-WALL" "new" "AB-HALFWALL" "color" "240" "AB-HALFWALL" "LTYPE" "DASHED" "AB-HALFWALL" "")(command "clayer" "AB-WALL")(princ))
 
+;select everything in a drawing and rotate it 90 degrees counter clockwise
 (defun c:r9()(command "rotate" "all" "" "0,0,0" "90")(princ))
 
-(defun c:sue()(command "-purge" "layers" "*" "no")(command "-purge" "blocks" "*" "no")(command "insert" "ELEC common layers.dwg" "0,0,0" "1" "1" "0")(princ))
+;SetUp Electrical layers
+;purge all unused layers. purge all unused blocks. insert all the Electrical Common Layers. Insert the version of the KJG North Arrow that I fixed.
+(defun c:sue()(command "-purge" "layers" "*" "no")(command "-purge" "blocks" "*" "no")(command "insert" "ELEC common layers.dwg" "0,0,0" "1" "1" "0")(command "insert" "KJG North Arrow.dwg" #nil)(princ))
+
+;LOCK ALL THE VIEWPORTS, SET XREFOVERRIDE TO "1" AND MAKE ALL THE XREF LAYERS GRAY
+(defun c:xgray()(c:lockvp)(command "xrefoverride" "1")(command "-layer" "color" "8" "*|*" "")(princ))
+
+;Switch to MODEL tab and ZOOM to EXTENTS
+(defun c:mz()(command "model" "zoom" "extents"))
 
 ;(command "zoom" "extents")(command "ucsicon" "origin")
 
