@@ -5,9 +5,10 @@
     (prin1)
 ) 
 
-(command "pdmode" "0")
 
-;(command "model" "zoom" "extents")(princ)
+
+
+
 
 ;(command "-layer" "new" "01-Delete" "color" "red" "01-Delete" "freeze" "01-Delete" "plot" "no" "01-Delete" "")(princ)
 
@@ -52,8 +53,11 @@
 ;SELECT PREVIOUSLY SELECTED OBJECTS
 (DEFUN C:P()(COMMAND "SELECT" "PREVIOUS" "")(PRINC))
 
-;VIWPORT FREEZE ANYTHING ON ADA LAYERS
-(DEFUN C:RAD()(COMMAND "VPLAYER" "FREEZE" "*ADA*" "SELECT")(PRINC))
+;VIWPORT FREEZE ANYTHING ON ADA LAYERS IN A SELECTED VIWPORT
+;(DEFUN C:RAD()(COMMAND "VPLAYER" "FREEZE" "*ADA*" "SELECT")(PRINC))
+
+;VIWPORT FREEZE ANYTHING ON ADA LAYERS IN ALL VIEWPORTS
+(DEFUN C:RAD()(COMMAND "VPLAYER" "FREEZE" "*ADA*" "ALL" "")(PRINC))
 
 ;VERTIAL XLINE
 (DEFUN C:XV()(COMMAND "XLINE" "V")(PRINC))
@@ -105,12 +109,51 @@
 (defun c:xgray()(c:lockvp)(command "xrefoverride" "1")(command "-layer" "color" "8" "*|*" "")(princ))
 
 ;Switch to MODEL tab and ZOOM to EXTENTS
-(defun c:mz()(command "model" "zoom" "extents"))
+(defun c:mz()(command "model" "zoom" "extents")(princ))
+
+;Change layer to Defpoints
+(defun c:dp()(command "clayer" "defpoints")(princ))
+
+(defun c:o0()(command "xline" "offset" "1.5")(princ))
+
+(defun c:o9()(command "xline" "offset" ".95")(princ))
+
+(defun c:lio()(command "layiso" "settings" "off" "off"))
+
+(defun c:lil()(command "layiso" "settings" "lock" "65"))
+
+;zoom to revision list
+(defun c:zr()(command "zoom" "31.85,3.48" "35.6,6.4")(princ))
+
+;zoom to revision list
+;(command "zoom" "31.85,3.48" "35.6,6.4")(princ)
+
+;(c:lr)(command "qsave")(command "close")
+
+;(foreach layout(layoutlist)(setvar "ctab" layout)(command "_script" "PlotSettings.scr"))(c:mz)(c:zc)(princ)
+
+;(c:lockvp)(c:mz)(c:zc)
+
+;(c:mz)(c:zc)
 
 ;(command "zoom" "extents")(command "ucsicon" "origin")
 
-;(command "scale" "all" "" "0,0,0" "1.33")(c:zec)
+;(command "zoom" "extents")(command "ucsicon" "noorigin")
 
 ;(c:lockvp)(command "xrefoverride" "1")(command "-layer" "color" "8" "*|*" "")(princ)
 
-;(command "scale" "all" "" "0,0,0" "4")(c:zec)
+;(command "model")(command "zoom" "extents")(command "ucsicon" "origin")(c:zec)(princ)
+
+;Scale from 1/4 to 1/8
+;(command "scale" "all" "" "0,0,0" "2")(c:zec)
+
+;Scale from 1/8 to 1/4 
+;(command "scale" "all" "" "0,0,0" ".5")(c:zec)
+
+;Scale from 1/4 to 3/16
+;(command "scale" "all" "" "0,0,0" "1.33333")(c:zec)
+
+;Scale from 1/4 to 3/32
+;(command "scale" "all" "" "0,0,0" "2.666667")(c:zec)
+
+;(c:p0)(c:mz)(c:zc)
