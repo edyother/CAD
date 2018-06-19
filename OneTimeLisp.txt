@@ -11,6 +11,10 @@
 
 (command "xrefoverride" "1")(command "-layer" "color" "250" "*|*" "")(princ)
 
+(command "xrefoverride" "1")(command "-layer" "color" "8" "*|*" "")(princ)
+
+(command "xrefoverride" "1")(command "-layer" "color" "8" "*|*" "")(command "-layer" "color" "253" "*|*FURN*" "")(princ)
+
 (command "-layer" "color" "8" "*|*" "color" "80" "*e-lite-fixt" "")(princ)
 
 (foreach layout(layoutlist)(setvar "ctab" layout)(COMMAND "_SCRIPT" "PlotEastview.scr"))(COMMAND "QSAVE")(COMMAND "CLOSE")(PRINC)
@@ -109,6 +113,10 @@
 
 (command "vplayer" "freeze" "*defpoints*" "all" "")(princ)
 
+(command "vplayer" "freeze" "*defpoints*" "except" "")(princ)
+
+(command "vplayer" "thaw" "*defpoints*" "current" "")(princ)
+
 (command "vplayer" "freeze" "*WALL-PATT" "all" "")(princ)
 
 (command "vplayer" "freeze" "*roof*" "all" "")(princ)
@@ -170,6 +178,8 @@ E-
 (foreach layout(layoutlist)(setvar "ctab" layout)(COMMAND "_SCRIPT" "PlotSettings.scr"))(c:zc)(PRINC)
 
 (foreach layout(layoutlist)(setvar "ctab" layout)(COMMAND "_SCRIPT" "PlotSettings.scr"))(PRINC)
+
+(COMMAND "_SCRIPT" "PlotSettings.scr")(princ)
 
 (command "-layer" "new" "E-POWR-EQPM-N-D_4" "color" "210" "E-POWR-EQPM-N-D_4" "")(princ)
 
@@ -279,6 +289,8 @@ E-
 
 (foreach layout(layoutlist)(setvar "ctab" layout)(command "_script" "PlotSettings.scr"))(c:mz)(c:zc)(princ)
 
+(command "_script" "PlotSettings.scr")(c:mz)(c:zc)
+
 (command "-layer" "freeze" "01-Delete" "")(princ)
 
 (command "-layer" "color" "251" "*lnwk-plan-*" "color" "1" "*|*lite*" "")(princ)
@@ -286,3 +298,110 @@ E-
 (command "vplayer" "freeze" "*lnwk-rcp*" "all" "thaw" "*e-lite-clng-n-d*" "all" "")(command "xclipframe" "0")(princ)
 
 (command "clayer" "defpoints" "point" "0,0,0")(command "bclose" "")
+
+(command "-purge" "layers" "*" "no")(command "-layer" "new" "DEFPOINTS" "")(c:p0)(command "clayer" "defpoints" "point" "0,0,0")(c:zec)
+
+(command "-purge" "all" "*" "no")(command "clayer" "0")(c:zec)
+
+(command "vplayer" "freeze" "*area*" "all" "freeze" "*property*" "all" "freeze" "defpoints" "all" "thaw" "defpoints" "current" "")(princ)
+
+(command "-layer" "color" "253" "*mill*" "color" "253" "*appliance*" "color" "253" "*fixture*" "color" "253" "*a-wall-hidden*" "color" "253" "*screen-b*" "color" "253" "*m-hvac-eqpt*" "color" "253" "*p-fixt*" "")(princ)
+
+(command "vplayer" "freeze" "*0-block*" "all" "")(command "-layer" "freeze" "*0-block*" "")(princ)
+
+(command "vplayer" "freeze" "*|*g-anno-nplt*" "all" "")(command "-layer" "freeze" "*|*g-anno-nplt*" "")(princ)
+
+(command "-layer" "new" "XREF" "")(princ)
+
+(command "-layer" "freeze" "0" "")(c:mz)(c:zc)
+
+(command "vplayer" "thaw" "*0-block*" "all" "")(command "-layer" "thaw" "*0-block*" "")(command "-layer" "color" "253" "*0-block" "")(princ)
+
+(command "-layer" "color" "251" "*stair*" "color" "253" "*a-roof*" "")(princ)
+
+(command "-layer" "color" "253" "*a-detl-patt*" "color" "253" "*kice*" "color" "253" "*s-metl*"  "")(princ)
+
+(command "-layer" "color" "253" "*fix*" "")(princ)
+
+(command "-layer" "color" "253" "*furn*" "color" "253" "*fix*" "")(princ)
+
+(c:xgray)(command "vplayer" "freeze" "defpoints" "all" "freeze" "*grid*" "all" "")(command "-layer" "color" "253" "*furn*" "color" "253" "*fix*" "color" "253" "*eqpm*" "color" "253" "*patt*" "")(princ)
+
+(command "-layer" "color" "210" "*e-panel*" "")(princ)
+
+(command "vplayer" "freeze" "*e-panel*" "all" "freeze" "*ada*" "all" "")(princ)
+
+(command "-layer" "color" "8" "*future*" "")(princ)
+
+(command "-layer" "color" "8" "*A-Flor-Elevator-Eqip*" "")(princ)
+
+(command "vplayer" "freeze" "*below*" "all" "")(princ)
+
+(command "vplayer" "freeze" "*a-grid*" "all" "")(command "-layer" "freeze" "*a-grid*" "")(princ)
+
+(command "vplayer" "freeze" "*M-EQPT-HVAC*" "all" "")(command "-layer" "freeze" "*M-EQPT-HVAC*" "")(princ)
+
+(command "-layer" "color" "210" "*M-EQPT-HVAC*" "")(princ)
+
+(command "vplayer" "freeze" "*pipe*" "all" "")(command "-layer" "freeze" "*pipe*" "")(princ)
+
+(command "vplayer" "freeze" "*|*a-detl-patt*" "all" "")(command "-layer" "freeze" "*|*a-detl-patt*" "")(princ)
+
+(command "-layer" "color" "8" "*s-cols*" "")(princ)
+
+(command "-layer" "color" "8" "*a-detl-wide*" "")(princ)
+
+(command "-layer" "color" "253" "*pipe*" "")(princ)
+
+(command "-layer" "color" "8" "*A-AC-Compressor*" "")(princ)
+
+(command "vplayer" "freeze" "*|*dims*" "all" "freeze" "*|*area-iden*" "all"  "freeze" "*|*a-genm*" "all" "freeze" "*|*a-wall-patt*" "all" "freeze" "*|*g-anno-revc*" "all" "freeze" "*|*g-anno-text*" "all" "freeze" "*|*q-spcq-iden*" "all" "freeze" "*|*s-grid*" "all" "")(princ)
+
+(command "-layer" "freeze" "*|*dims*" "freeze" "*|*area-iden*" "freeze" "*|*a-genm*" "freeze" "*|*a-wall-patt*" "freeze" "*|*g-anno-revc*" "freeze" "*|*g-anno-text*" "freeze" "*|*q-spcq-iden*" "freeze" "*|*s-grid*" "freeze" "*|*a-detl" "")(princ)
+
+(command "-layer" "color" "253" "*|*i-furn*" "color" "253" "*|*p-sanr-fixt*" "color" "253" "*|*q-case*" "color" "253" "*|*q-spcq*" "color" "253" "*|* m-eqpm*" "")(princ)
+
+(command "vplayer" "freeze" "*|*p-chase*" "all" "*|*p-pipe-sans*" "all" "*P-Drain" "all" "")(command "-layer" "freeze" "*|*p-chase*" "freeze" "*|*p-pipe-sans*" "freeze" "*P-Drain" "")(command "-layer" "color" "253" "*|*p-dnspt*" "")(princ)
+
+(command "vplayer" "freeze" "*P-Drain" "all" "")(command "-layer" "freeze" "*P-Drain" "")(princ)
+
+(command "vplayer" "freeze" "*a-clng-patt*" "all" "")(command "-layer" "freeze" "*a-clng-patt*" "")(princ)
+
+(command "-layer" "color" "8" "*gyp*" "")(command "vplayer" "freeze" "*M-EXHS-ARROW*" "all" "")(command "-layer" "freeze" "*M-EXHS-ARROW*" "")(princ)
+(command "vplayer" "freeze" "*a-above*" "all" "")(command "-layer" "freeze" "*a-above*" "")(princ)
+
+(command "-layer" "color" "8" "*exhs*" "")(princ)
+
+(command "vplayer" "freeze" "*M-Duct-Exhs" "all" "")(command "-layer" "freeze" "*M-Duct-Exhs" "")(princ)
+
+(command "vplayer" "freeze" "*M-Hvac-Duct" "all" "")(command "-layer" "freeze" "*M-Hvac-Duct" "")(princ)
+
+(command "vplayer" "freeze" "*object" "all" "")(command "-layer" "freeze" "*object" "")(princ)
+
+(command "vplayer" "freeze" "*a-clng-hatch" "all" "")(command "-layer" "freeze" "*a-clng-hatch" "")(princ)
+
+(command "vplayer" "freeze" "*e-lite-eqpm-n-d" "all" "")(command "-layer" "freeze" "*|*e-lite-eqpm-n-d" "")(princ)
+
+(command "vplayer" "freeze" "*a-clng-grid" "all" "")(command "-layer" "freeze" "*a-clng-grid" "")(princ)
+
+(command "vplayer" "freeze" "*e-panel" "all" "")(command "-layer" "freeze" "*e-panel" "")(princ)
+
+(command "vplayer" "freeze" "*a-ada" "all" "")(command "-layer" "freeze" "*a-ada" "")(princ)
+
+(command "vplayer" "freeze" "*0_AREA" "all" "")(command "-layer" "freeze" "*0_AREA" "")(princ)
+
+(command "vplayer" "freeze" "*roof-pitch" "all" "")(command "-layer" "freeze" "*roof-pitch" "")(princ)
+
+(command "vplayer" "freeze" "*roof-drain" "all" "")(command "-layer" "freeze" "*roof-drain" "")(princ)
+
+(command "vplayer" "freeze" "*numb*" "all" "")(princ)
+
+(command "vplayer" "freeze" "lnwk-grid*detl*" "all" "")(command "-layer" "freeze" "lnwk-grid*detl*" "")(princ)
+
+(command "-layer" "color" "8" "*|*a-flor-fixture*" "")(command "-layer" "color" "253" "*|*a-eqpm*" "")(princ)
+
+(command "-layer" "color" "253" "*|*a-eqpm*" "")(princ)
+
+(command "vplayer" "freeze" "*M105*" "all" "")(command "-layer" "freeze" "*M105*" "")(command "vplayer" "thaw" "*M-anno-iden" "all" "")(command "-layer" "thaw" "*M-anno-iden" "")(princ)
+
+(command "vplayer" "freeze" "*|*overhead" "all" "")(command "-layer" "freeze" "*|*overhead" "")(princ)
