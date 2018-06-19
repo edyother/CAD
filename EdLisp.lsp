@@ -6,12 +6,6 @@
 ) 
 
 
-
-
-
-
-;(command "-layer" "new" "01-Delete" "color" "red" "01-Delete" "freeze" "01-Delete" "plot" "no" "01-Delete" "")(princ)
-
 ;ZOOM TO 24X36 SHEET
 (DEFUN C:ZS()(COMMAND "ZOOM" "0,0,0" "36,24")(PRINC))
 
@@ -26,6 +20,7 @@
 
 ;CHANGE LAYER TO 0 THEN START XREF COMMAND.
 (DEFUN C:IX()(COMMAND "CLAYER" "0")(COMMAND "-XREF")(PRINC))
+
 ;CHANGE LAYER TO G-Anno-Nplt.
 (DEFUN C:NP()(COMMAND "CLAYER" "G-Anno-Nplt")(PRINC))
 
