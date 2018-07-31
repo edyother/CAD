@@ -405,3 +405,48 @@ E-
 (command "vplayer" "freeze" "*M105*" "all" "")(command "-layer" "freeze" "*M105*" "")(command "vplayer" "thaw" "*M-anno-iden" "all" "")(command "-layer" "thaw" "*M-anno-iden" "")(princ)
 
 (command "vplayer" "freeze" "*|*overhead" "all" "")(command "-layer" "freeze" "*|*overhead" "")(princ)
+
+(command "vplayer" "freeze" "*m-anno*,*E-POWR-CIRC-N-D*" "all" "")(command "-layer" "freeze" "*m-anno*,*E-POWR-CIRC-N-D*" "")(princ)
+
+(command "vplayer" "freeze" "*|*s-grid*,*|*s-joist*,*|*nplt*" "all" "")(command "-layer" "freeze" "*|*s-grid*,*|*s-joist,*|*nplt**" "color" "8" "*|*s-cols*" "")(c:rad)(princ)
+
+(command "-layer" "color" "8" "*A-Roof-Lower roof*" "")(princ)
+
+(command "vplayer" "freeze" "*|*s-grid*,*|*s-joist*,*|*nplt*" "all" "")(command "-layer" "freeze" "*|*s-grid*,*|*s-joist,*|*nplt*" "")(princ)
+
+(command "vplayer" "freeze" "defpoints,*|*g-anno-symb*,*|*a-wall-brick-patt*,*|*a-wall-patt*,*|*A-WALL-INTERIOR-PATT,*|*s-grid*,*|*s-grid-iden*," "all" "")(command "-layer" "freeze" "*|*g-anno-symb*,*|*a-wall-brick-patt*,*|*a-wall-patt*,*|*A-WALL-INTERIOR-PATT,*|*s-grid*,*|*s-grid-iden*" "")(princ)
+
+(command "vplayer" "freeze" "*A-WALL-INTERIOR-PATT" "all" "")(command "-layer" "freeze" "*A-WALL-INTERIOR-PATT" "")(princ)
+ 
+(command "vplayer" "freeze" "defpoints,*CEXprop,*a-rcp-patt*,*a-rcp-bulkhead*,*s-grid-iden*,*s-grid*,*ada*,*a-wall-patt*,*a-wall-interior-patt*,*a-wall-brick-patt*,*a-detl-patt*,*q-spcq-hdln*,*a-genm-sill,*a-genm-hdln" "all" "")(command "-layer" "freeze" "defpoints,*CEXprop,*a-rcp-patt*,*a-rcp-bulkhead*,*s-grid-iden*,*s-grid*,*ada*,*a-wall-patt*,*a-wall-interior-patt*,*a-wall-brick-patt*,*a-detl-patt*,*q-spcq-hdln*,*a-genm-sill,*a-genm-hdln" "")(princ)
+
+(COMMAND "-LAYER" "COLOR" "253" "*P-FIXT-FLOR" "")
+
+(COMMAND "LINE" "0,0,0" "@1<0" "")(COMMAND "LINE" "0,0,0" "@1<30" "")(COMMAND "LINE" "0,0,0" "@1<60" "")(COMMAND "LINE" "0,0,0" "@1<90" "")(COMMAND "LINE" "0,0,0" "@1<120" "")(COMMAND "LINE" "0,0,0" "@1<150" "")(COMMAND "LINE" "0,0,0" "@1<180" "")(COMMAND "LINE" "0,0,0" "@1<210" "")(COMMAND "LINE" "0,0,0" "@1<240" "")(COMMAND "LINE" "0,0,0" "@1<270" "")(COMMAND "LINE" "0,0,0" "@1<300" "")(COMMAND "LINE" "0,0,0" "@1<330" "")(PRINC)
+
+(SETQ PLACEPOINT (GETPOINT))(COMMAND "LINE" PLACEPOINT "@1<0" "")(COMMAND "LINE" PLACEPOINT "@1<30" "")(COMMAND "LINE" PLACEPOINT "@1<60" "")(COMMAND "LINE" PLACEPOINT "@1<90" "")(COMMAND "LINE" PLACEPOINT "@1<120" "")(COMMAND "LINE" PLACEPOINT "@1<150" "")(COMMAND "LINE" PLACEPOINT "@1<180" "")(COMMAND "LINE" PLACEPOINT "@1<210" "")(COMMAND "LINE" PLACEPOINT "@1<240" "")(COMMAND "LINE" PLACEPOINT "@1<270" "")(COMMAND "LINE" PLACEPOINT "@1<300" "")(COMMAND "LINE" PLACEPOINT "@1<330" "")(PRINC)
+
+(command "-layer" "color" "251" "*|*A-Detl-Patt,*|*M-EQPM,*|*A-GLAZ-CWMG,*|*A-GLAZ,*|*A-GLAZ PANE,*|*A-GLAZ FRAME," "color" "8" "*|*A-WALL-INTERIOR-HALF,*|*A-WALL-INTERIOR-HALF-PATT" "")(princ)
+
+(command "-layer" "color" "8" "*|*A-WALL-INTERIOR-HALF,*|*A-WALL-INTERIOR-HALF-PATT" "")(princ)
+
+(setq oblayer(getvar "clayer"))(command "-layer" "new" (strcat oblayer "_4") "off" oblayer "")(princ)
+
+(setq oblayer(getvar "clayer"))(command "-layer" "new" (strcat oblayer "_8") "off" oblayer "" "")(princ)
+
+(COMMAND "-LAYER" "COLOR" "252" "*|*M-HVAC-RETURN,*|*H-HVAC-SUPPLY" "")
+
+(COMMAND "vplayer" "freeze" "*|*M-Hvac-Duct-Retn,*|*M-Hvac-Duct-Supp" "all" "")(command "-LAYER" "freeze" "*|*M-Hvac-Duct-Retn,*|*M-Hvac-Duct-Supp" "")(princ)
+
+(COMMAND "-LAYER" "COLOR" "251" "*|*A-EQUIP" "")
+
+(COMMAND "-LAYER" "COLOR" "252" "*|*FURN*" "")
+
+(COMMAND "-LAYER" "COLOR" "253" "*|*M-Hvac-Duct-Retn,*|*M-Hvac-Duct-Supp" "")
+
+;ELECTRICAL SHEET SETUP FOR HOLIDAY INN PATEL
+(command "vplayer" "freeze" "*|*s-grid-iden,*|*s-grid,*|*a-wall-patt,*|*g-anno-symb,*|*q-spcq-hdln,*|*a-floor-patt,*|*a-clng-patt,*|*a-flor-patt,*|*a-wall-interior-patt,*|*a-wall-brick-patt,*|*a-detl-hdln,*|*a-rcp-patt,*|*01-delete,*|*a-clng" "all" "")(command "-layer" "freeze" "*|*s-grid-iden,*|*s-grid,*|*a-wall-patt,*|*g-anno-symb,*|*q-spcq-hdln,*|*a-floor-patt,*|*a-clng-patt,*|*a-flor-patt,*|*a-wall-interior-patt,*|*a-wall-brick-patt,*|*a-detl-hdln,*|*a-rcp-patt,*|*01-delete,*|*a-clng" "")(command "-LAYER" "COLOR" "251" "*|*a-rcp-grid,*|*a-rcp-bulkhead,*|*m-eqpm,*|*q-spcq" "")(command "vplayer" "freeze" "*|*fire*" "all" "")(command "-layer" "freeze" "*|*fire*" "")(princ)
+
+(command "vplayer" "freeze" "*|*fire*" "all" "")(command "-layer" "freeze" "*|*fire*" "")(princ)
+
+(command "vplayer" "freeze" "*A-CLNG-BULKHEAD" "all" "")(command "-layer" "freeze" "*A-CLNG-BULKHEAD" "")(princ)
