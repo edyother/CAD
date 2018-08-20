@@ -211,9 +211,6 @@ E-
 
 (command "-layer" "color" "8" "*fire*" "")(princ)
 
-;zoom to revision list
-(command "zoom" "31.85,3.48" "35.6,6.4")(princ)
-
 (command "vplayer" "freeze" "defpoints" "all" "")(foreach layout(layoutlist)(setvar "ctab" layout)(command "vplayer" "thaw" "defpoints" "current" ""))(princ)
 
 (command "vplayer" "freeze" "*a-flor-furn" "all" "")(princ)
@@ -249,8 +246,6 @@ E-
 
 (command "select" "-0.68933,0.82821" "0.76096,-0.63516")(princ)
 
-(command "-purge" "layers" "*" "no")(command "-purge" "blocks" "*" "no")(command "insert" "ELEC common layers.dwg" "0,0,0" "1" "1" "0")(command "insert" "KJG North Arrow.dwg" #nil)(princ)
-
 ;Scale from 1/4 to 1/16
 (command "scale" "all" "" "0,0,0" "4")(c:zec)
 
@@ -276,8 +271,6 @@ E-
 (command "vplayer" "freeze" "*A-FLOR-PATT" "all" "freeze" "*FURN" "all" "")(princ)
 
 (command "model")(command "zoom" "extents")(foreach layout(layoutlist)(setvar "ctab" layout)(c:z1))(COMMAND "QSAVE")(COMMAND "CLOSE")(PRINC)
-
-(command "vplayer" "freeze" "*ada*" "all" "")(princ)
 
 (command "model")(command "zoom" "extents")(command "ucsicon" "origin")(command "qsave")(princ)
 
@@ -422,8 +415,10 @@ E-
 
 (COMMAND "-LAYER" "COLOR" "253" "*P-FIXT-FLOR" "")
 
+;makes an astrix that is aligned with the arrows of an electrical plan notes symbol
 (COMMAND "LINE" "0,0,0" "@1<0" "")(COMMAND "LINE" "0,0,0" "@1<30" "")(COMMAND "LINE" "0,0,0" "@1<60" "")(COMMAND "LINE" "0,0,0" "@1<90" "")(COMMAND "LINE" "0,0,0" "@1<120" "")(COMMAND "LINE" "0,0,0" "@1<150" "")(COMMAND "LINE" "0,0,0" "@1<180" "")(COMMAND "LINE" "0,0,0" "@1<210" "")(COMMAND "LINE" "0,0,0" "@1<240" "")(COMMAND "LINE" "0,0,0" "@1<270" "")(COMMAND "LINE" "0,0,0" "@1<300" "")(COMMAND "LINE" "0,0,0" "@1<330" "")(PRINC)
 
+;choose location of center and makes an astrix that is aligned with the arrows of an electrical plan notes symbol
 (SETQ PLACEPOINT (GETPOINT))(COMMAND "LINE" PLACEPOINT "@1<0" "")(COMMAND "LINE" PLACEPOINT "@1<30" "")(COMMAND "LINE" PLACEPOINT "@1<60" "")(COMMAND "LINE" PLACEPOINT "@1<90" "")(COMMAND "LINE" PLACEPOINT "@1<120" "")(COMMAND "LINE" PLACEPOINT "@1<150" "")(COMMAND "LINE" PLACEPOINT "@1<180" "")(COMMAND "LINE" PLACEPOINT "@1<210" "")(COMMAND "LINE" PLACEPOINT "@1<240" "")(COMMAND "LINE" PLACEPOINT "@1<270" "")(COMMAND "LINE" PLACEPOINT "@1<300" "")(COMMAND "LINE" PLACEPOINT "@1<330" "")(PRINC)
 
 (command "-layer" "color" "251" "*|*A-Detl-Patt,*|*M-EQPM,*|*A-GLAZ-CWMG,*|*A-GLAZ,*|*A-GLAZ PANE,*|*A-GLAZ FRAME," "color" "8" "*|*A-WALL-INTERIOR-HALF,*|*A-WALL-INTERIOR-HALF-PATT" "")(princ)
@@ -450,3 +445,38 @@ E-
 (command "vplayer" "freeze" "*|*fire*" "all" "")(command "-layer" "freeze" "*|*fire*" "")(princ)
 
 (command "vplayer" "freeze" "*A-CLNG-BULKHEAD" "all" "")(command "-layer" "freeze" "*A-CLNG-BULKHEAD" "")(princ)
+
+(command "vplayer" "freeze" "*g-cntr" "all" "")(command "-layer" "freeze" "*g-cntr" "")(princ)
+
+(command "vplayer" "freeze" "*center" "all" "")(command "-layer" "freeze" "*center" "")(princ)
+
+(command "vplayer" "freeze" "*zfurn*" "all" "")(command "-layer" "freeze" "*zfurn*" "")(princ)
+
+(command "vplayer" "freeze" "*A-FURN-SITE-PATT,*a-flor-patt" "all" "")(command "-layer" "freeze" "*A-FURN-SITE-PATT,*a-flor-patt" "")(princ)
+
+(command "vplayer" "freeze" "*a-flor-patt" "all" "")(command "-layer" "freeze" "*a-flor-patt" "")(princ)
+
+(command "-layer" "color" "8" "*A-DOOR-EXTR" "")(princ)
+
+;Pullman Electrical Site Plan New Layers
+(command "vplayer" "freeze" "*a-abov,*A-Flor-Slab,*M-HVAC-EQPT,*A-Wall" "all" "")(command "-layer" "freeze" "*a-abov,*A-Flor-Slab,*M-HVAC-EQPT,*A-Wall" "")(princ)
+
+(command "-layer" "color" "8" "*A-Flor-Slab" "")(princ)
+
+(command "-layer" "color" "8" "*fire*" "")(princ)
+
+(command "vplayer" "thaw" "defpoints" "all" "")(princ)
+
+(command "-layer" "color" "27" "Defpoints" "")(command "vplayer" "freeze" "defpoints" "all" "")(command "vplayer" "thaw" "defpoints" "current" "")(princ)
+
+(command "-layer" "color" "27" "Defpoints" "")(princ)
+
+(command "-layer" "color" "253" "*|*Site-Lscp-Plnt,*|*A-FLOR-FNSH," "")(princ)
+
+(command "-layer" "color" "8" "*|*A-Flor-TPar" "")(princ)
+
+(command "-layer" "plot" "no" "rev-7" "")(princ)
+
+(command "vplayer" "freeze" "E-POWR-CIRC-NUMB" "all" "")(princ)
+
+(command "vplayer" "freeze" "*CONT-M" "all" "")(command "-layer" "freeze" "*CONT-M" "")(princ)
