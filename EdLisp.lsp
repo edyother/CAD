@@ -1,360 +1,567 @@
+;makes the fillet command work again
+(command "redefine" "fillet")
 
+;sets the osnap and polar the way i usually like it
 (defun c:65()
 (command "osmode" "6591")
+(command "autosnap" "63")
 (princ))
 
+;turns off osnap and polar
+(defun c:66()
+(command "osmode" "0")
+(command "autosnap" "0")
+(princ))
+
+;allows you to change all layers of one color to another color
 (defun c:colorchange (/ c1 c2 )
     (vl-load-com)
-    (setq c1 (getint " What is the original color: ") c2 (getint " What is the new color: "))
-    (vlax-for layer (vla-get-Layers (vla-get-ActiveDocument (vlax-get-Acad-Object)))(if (= c1 (vla-get-Color layer))(vla-put-Color layer c2)))
+    (setq c1 (getint " what is the original color: ") c2 (getint " what is the new color: "))
+    (vlax-for layer (vla-get-layers (vla-get-activedocument (vlax-get-acad-object)))(if (= c1 (vla-get-color layer))(vla-put-color layer c2)))
     (prin1)
-) 
+)
 
+;zoom to 24x36 sheet
+(defun c:zs()
+(command "zoom" "0,0,0" "36,24")
+(princ)
+)
 
-;ZOOM TO 24X36 SHEET
-(DEFUN C:ZS()(COMMAND "ZOOM" "0,0,0" "36,24")(PRINC))
+;zoom to 30x42 sheet
+(defun c:z1()
+(command "zoom" "0,0,0" "42,30")
+(princ)
+)
 
-;ZOOM TO 30X42 SHEET
-(DEFUN C:Z1()(COMMAND "ZOOM" "0,0,0" "42,30")(PRINC))
+;reconcile all layers
+(defun c:lr()
+(command "-layer" "e" "*" "")
+(princ)
+)
 
-;RECONCILE ALL LAYERS
-(DEFUN C:LR()(COMMAND "-LAYER" "E" "*" "")(PRINC))
+;zoom all layouts to 24x36 sheet, save file, and close.
+(defun c:zc()
+(command "layon")
+(c:lockvp)
+(c:mz)
+(foreach layout(layoutlist)(setvar "ctab" layout)(command "zoom" "0,0,0" "@36,24"))
+(c:p0)
+(command "qsave")
+(command "close")
+(princ)
+)
 
-;ZOOM ALL LAYOUTS TO 24X36 SHEET, SAVE FILE, AND CLOSE.
-(DEFUN C:ZC()(command "layon")(c:lockvp)(c:mz)(foreach layout(layoutlist)(setvar "ctab" layout)(COMMAND "ZOOM" "0,0,0" "@36,24"))(C:P0)(COMMAND "QSAVE")(COMMAND "CLOSE")(PRINC))
+;change layer to 0 then start xref command.
+(defun c:ix()
+(command "clayer" "0")
+(command "-xref")
+(princ)
+)
 
-;CHANGE LAYER TO 0 THEN START XREF COMMAND.
-(DEFUN C:IX()(COMMAND "CLAYER" "0")(COMMAND "-XREF")(PRINC))
-
-;CHANGE LAYER TO 0 THEN CHOOSE FILE TO XREF AND INSERT AT 0,0,0 AND ZOOM TO EXTENTS.
+;change layer to 0 then choose file to xref and insert at 0,0,0 and zoom to extents.
 (defun c:ix()
 	(command "clayer" "0")
 	(command "-xref" "o" 
-		(getfiled "Choose File" "G:/" "dwg" 0)
+		(getfiled "choose file" "g:/" "dwg" 0)
 	"0,0,0" "1" "1" "0")
 	(command "zoom" "extents")
-	(princ))
+(princ)
+)
 
-;CHANGE LAYER TO G-Anno-Nplt.
-(DEFUN C:NP()(COMMAND "CLAYER" "G-Anno-Nplt")(PRINC))
+;change layer to g-anno-nplt.
+(defun c:np()
+(command "clayer" "g-anno-nplt")
+(princ)
+)
 
-;LOCK ALL VIEWPORTS IN CURRENT PAGE LAYOUT.
-(DEFUN C:LV()(COMMAND "-VPORTS" "LOCK" "ON" "ALL" "")(PRINC))
+;lock all viewports in current page layout.
+(defun c:lv()
+(command "-vports" "lock" "on" "all" "")
+(princ)
+)
 
-;COPY WHATEVER IS SELECTED INTO CLIPBOARD WITH BASEPOINT 0,0,0.
-(DEFUN C:C0()(COMMAND "COPYBASE" "0,0,0")(PRINC))
+;copy whatever is selected into clipboard with basepoint 0,0,0.
+(defun c:c0()
+(command "copybase" "0,0,0")
+(princ)
+)
 
-;PASTE WHATEVER IS IN CLIPBOARD TO INSERTION POINT 0,0,0.
-(DEFUN C:00()(COMMAND "PASTECLIP" "0,0,0")(PRINC))
+;paste whatever is in clipboard to insertion point 0,0,0.
+(defun c:00()
+(command "pasteclip" "0,0,0")
+(princ)
+)
 
-;RELOAD ALL XREFS.
-(DEFUN C:RX()(COMMAND "-XREF" "RELOAD" "*")(PRINC))
+;reload all xrefs.
+(defun c:rx()
+(command "-xref" "reload" "*")
+(princ)
+)
 
-;PURGE BLOCKS NAMED XX
-(DEFUN C:PX()(COMMAND "-PURGE" "BLOCKS" "XX" "N")(PRINC))
+;purge blocks named xx
+(defun c:px()
+(command "-purge" "blocks" "xx" "n")
+(princ)
+)
 
-;ENTER "LOCKVP" TO LOCK ALL VIEWPORTS IN ALL PAGE LAYOUTS
-(DEFUN C:LOCKVP()(foreach layout(layoutlist)(setvar "ctab" layout)(COMMAND "PSPACE")(COMMAND "-VPORTS" "LOCK" "ON" "ALL" ""))(PRINC))
+;enter "lockvp" to lock all viewports in all page layouts
+(defun c:lockvp()
+	(foreach layout(layoutlist)
+		(setvar "ctab" layout)
+		(command "pspace")
+		(command "-vports" "lock" "on" "all" "")
+	)
+(princ)
+)
 
-;ENTER "ULOCKVP" TO UNLOCK ALL VIEWPORTS IN ALL PAGE LAYOUTS
-(DEFUN C:ULOCKVP()(foreach layout(layoutlist)(setvar "ctab" layout)(COMMAND "-VPORTS" "LOCK" "OFF" "ALL" ""))(PRINC))
+;enter "ulockvp" to unlock all viewports in all page layouts
+(defun c:ulockvp()
+	(foreach layout(layoutlist)
+		(setvar "ctab" layout)
+		(command "-vports" "lock" "off" "all" "")
+	)
+(princ)
+)
 
-;VIWPORT FREEZE ANYTHING ON ADA LAYERS IN ALL VIEWPORTS
-(DEFUN C:RAD()(COMMAND "VPLAYER" "FREEZE" "*ADA*" "ALL" "")(COMMAND "-LAYER" "FREEZE" "*ADA*" "")(PRINC))
+;viwport freeze anything on ada layers in all viewports
+(defun c:rad()
+(command "vplayer" "freeze" "*ada*" "all" "")
+(command "-layer" "freeze" "*ada*" "")
+(princ)
+)
 
-;VERTIAL XLINE
-(DEFUN C:XV()(COMMAND "XLINE" "V")(PRINC))
+;vertial xline
+(defun c:xv()
+(command "xline" "v")
+(princ)
+)
 
-;HORIZONTAL XLINE
-(DEFUN C:XH()(COMMAND "XLINE" "H")(PRINC))
+;horizontal xline
+(defun c:xh()
+(command "xline" "h")
+(princ)
+)
 
-;VERTIAL AND HORIZONTAL XLINES AT 0,0,0
-(DEFUN C:X0()(COMMAND "XLINE" "V" "0,0,0" "")(COMMAND "XLINE" "H" "0,0,0" "")(PRINC))
+;vertial and horizontal xlines at 0,0,0
+(defun c:x0()
+(command "xline" "vertical" "0,0,0" "")
+(command "xline" "horizontal" "0,0,0" "")
+(princ)
+)
 
-;SET PDMODE TO "0"
-(DEFUN C:p0()(COMMAND "PDMODE" "0")(PRINC))
+;set pdmode to "0"
+(defun c:p0()
+(command "pdmode" "0")
+(princ)
+)
 
-;SET PDMODE TO "3"
-(DEFUN C:p3()(COMMAND "PDMODE" "3")(PRINC))
+;set pdmode to "3"
+(defun c:p3()
+(command "pdmode" "3")
+(princ)
+)
 
-;Set pdmode to 3 and start POINT command
-(defun c:po()(COMMAND "PDMODE" "3")(command "point")(princ))
+;set pdmode to 3 and start point command
+(defun c:po()
+(command "pdmode" "3")
+(command "point")
+(princ)
+)
 
-;SET IMAGEFRAME TO "0" and show plot preview
-(DEFUN C:i0()(COMMAND "IMAGEFRAME" "0")(command "preview")(PRINC))
+;set imageframe to "0" and show plot preview
+(defun c:i0()
+(command "imageframe" "0")
+(princ)
+)
 
-;SET IMAGEFRAME TO "2" and show plot preview
-(DEFUN C:i2()(COMMAND "IMAGEFRAME" "2")(command "preview")(PRINC))
+;set imageframe to "2" and show plot preview
+(defun c:i2()
+(command "imageframe" "2")
+(princ)
+)
 
-;DUPLICATE SELECTED OBJECT IS SAME LOCATION
-(DEFUN C:dup()
-(COMMAND "copy" (ssget) "" "0,0,0" "0,0,0")
-(PRINC))
+;duplicate selected object is same location
+(defun c:dup()
+(command "copy" (ssget) "" "0,0,0" "0,0,0")
+(princ))
 
-;ZOOM EXTENTS, SAVE AND CLOSE
-(DEFUN C:ZEC()(C:P0)(COMMAND "ZOOM" "EXTENTS" "QSAVE" "CLOSE")(PRINC))
+;zoom extents, save and close
+(defun c:zec()
+(c:p0)
+(command "zoom" "extents" "qsave" "close")
+(princ)
+)
 
-;change "UCS" to "World" and rotate view to match
-(defun c:RET()(command "ucs" "world")(command "plan" "current")(princ))
+;change "ucs" to "world" and rotate view to match
+(defun c:ret()
+(command "ucs" "world")
+(command "plan" "current")
+(princ)
+)
 
-;CLOSE WITHOUT SAVING
-(DEFUN C:CN()(COMMAND "_CLOSE" "_Y")(princ))
+;close without saving
+(defun c:cn()
+(command "_close" "_y")
+(princ)
+)
 
-;PASTE WHATEVER IS IN CLIPBOARD AT 0,0,0 ON EACH PAGE LAYOUT
-(defun c:99()(foreach layout(layoutlist)(setvar "ctab" layout)(c:00))(PRINC))
+;paste whatever is in clipboard at 0,0,0 on each page layout
+(defun c:99()
+	(foreach layout(layoutlist)
+		(setvar "ctab" layout)
+		(c:00)
+	)
+(princ)
+)
 
-;PURGE AND SET UP NEW LAYERS FOR AS BUILT DRAWING
+;purge and set up new layers for as built drawing
 (defun c:asbl()
 	(command "-purge" "layers" "*" "no")
 	(command "-purge" "blocks" "*" "no")
 	(command "-layer" 
-		"new" "AB-IMAGE" 
-		"new" "AB-WALL" 
-			"color" "80" "AB-WALL" 
-		"new" "AB-DASHED" 
-			"color" "RED" "AB-DASHED" 
-			"LTYPE" "HIDDEN" "AB-DASHED" 
-		"new" "AB-ELEC" 
-			"color" "210" "AB-ELEC" 
-		"new" "AB-STAIR-RAIL" 
-			"color" "RED" "AB-STAIR-RAIL" 
-		"new" "AB-DOOR" 
-			"color" "RED" "AB-DOOR" 
-		"new" "AB-FLOOR" 
-			"color" "RED" "AB-FLOOR" 
-		"new" "AB-WINDOW" 
-			"color" "RED" "AB-WINDOW" 
-		"new" "AB-ROOF" 
-			"color" "MAGENTA" "AB-ROOF" 
-		"new" "AB-FIXT" 
-			"color" "RED" "AB-FIXT"
-		"new" "AB-COLUMN" 
-			"color" "CYAN" "AB-COLUMN"
-		"new" "AB-BEAM" 
-			"color" "RED" "AB-BEAM"
-			"LTYPE" "CENTER" "AB-BEAM"
+		"new" "ab-image" 
+		"new" "ab-wall" 
+			"color" "80" "ab-wall" 
+		"new" "ab-dashed" 
+			"color" "red" "ab-dashed" 
+			"ltype" "hidden" "ab-dashed" 
+		"new" "ab-elec" 
+			"color" "210" "ab-elec" 
+		"new" "ab-stair-rail" 
+			"color" "red" "ab-stair-rail" 
+		"new" "ab-door" 
+			"color" "red" "ab-door" 
+		"new" "ab-floor" 
+			"color" "red" "ab-floor" 
+		"new" "ab-window" 
+			"color" "red" "ab-window" 
+		"new" "ab-roof" 
+			"color" "magenta" "ab-roof" 
+		"new" "ab-fixt" 
+			"color" "red" "ab-fixt"
+		"new" "ab-column" 
+			"color" "cyan" "ab-column"
+		"new" "ab-beam" 
+			"color" "red" "ab-beam"
+			"ltype" "center" "ab-beam"
 	"")
-(command "clayer" "AB-WALL")
-(command "insert" "KJG North Arrow.dwg" #nil)
-(princ))
+(command "clayer" "ab-wall")
+(command "insert" "kjg north arrow.dwg=" #nil)
+(princ)
+)
 
 ;select everything in a drawing and rotate it 90 degrees counter clockwise
-(defun c:r9()(command "rotate" "all" "" "0,0,0" "90")(princ))
+(defun c:r9()
+(command "rotate" "all" "" "0,0,0" "90")
+(princ)
+)
 
-;SetUp Electrical layers purge all unused layers. purge all unused blocks. insert all the Electrical Common Layers. Insert the version of the KJG North Arrow that I fixed.
-(defun c:sue()(command "-purge" "layers" "*" "no")(command "-purge" "blocks" "*" "no")(c:mz)(command "insert" "ELEC common layers.dwg" "0,0,0" "1" "1" "0")(command "insert" "KJG North Arrow.dwg" #nil)(princ))
+;setup electrical layers purge all unused layers. purge all unused blocks. insert all the electrical common layers. insert the version of the kjg north arrow that i fixed.
+(defun c:sue()
+	(command "-purge" "layers" "*" "no")
+	(command "-purge" "blocks" "*" "no")
+	(c:mz)
+	(command "insert" "elec common layers.dwg=" "0,0,0" "1" "1" "0")
+	(command "insert" "kjg north arrow.dwg=" #nil)
+	(command "insert" "h21=" #nil)
+	(command "insert" "c-notewheel=" #nil)
+(princ)
+)
 
-;Insert Note Spacing Block
+;insert note spacing block
 (defun c:nl()
-(command "insert" "NoteSpacing.dwg" pause "1" "1" "0")
-(princ))
+(command "insert" "notespacing.dwg" pause "1" "1" "0")
+(princ)
+)
 
-;Move Note Spacing Block
+;move note spacing block
 (defun c:nn()
 (command "osmode" "9")
 (command "erase" (ssget)"")
-(command "insert" "NoteSpacing.dwg" "@" "1" "1" "0")
+(command "insert" "notespacing.dwg" "@" "1" "1" "0")
 (command "move" (ssget)"")
-(princ))
+(princ)
+)
 
 (defun c:r1()
 (command "rotate" (ssget)"" pause "180")
-(princ))
+(princ)
+)
 
 
-;LOCK ALL THE VIEWPORTS, SET XREFOVERRIDE TO "1" AND MAKE ALL THE XREF LAYERS GRAY
-(defun c:xgray()(c:lockvp)(command "xrefoverride" "1")(command "-layer" "color" "8" "*|*" "color" "253" "*furn*" "color" "253" "*fix*" "")(princ))
+;lock all the viewports, set xrefoverride to "1" and make all the xref layers gray
+(defun c:xgray()
+(c:lockvp)
+(command "xrefoverride" "1")
+(command "-layer" "color" "8" "*|*" "color" "252" "*furn*" "color" "252" "*fix*" "")
+(princ)
+)
 
-;Switch to MODEL tab and ZOOM to EXTENTS
-(defun c:mz()(command "model" "zoom" "extents")(princ))
+;switch to model tab and zoom to extents
+(defun c:mz()
+(command "model" "zoom" "extents")
+(princ)
+)
 
-;Set current layer to Defpoints
-(defun c:dp()(command "clayer" "defpoints")(princ))
+;set current layer to defpoints
+(defun c:dp()
+(command "clayer" "defpoints")
+(princ)
+)
 
-;(defun c:o0()(command "xline" "offset" "1.5")(princ))
+;isolate chosen layers by turning off all others
+(defun c:lio()
+(command "layiso" "settings" "off" "off")
+(princ)
+)
 
-;(defun c:o9()(command "xline" "offset" ".95")(princ))
+;isolate chosen layers by locking and fading
+(defun c:lil()
+(command "layiso" "settings" "lock" "65")
+(princ)
+)
 
-;Isolate chosen layers by turning off all others
-(defun c:lio()(command "layiso" "settings" "off" "off")(princ))
-
-;Isolate chosen layers by locking and fading
-(defun c:lil()(command "layiso" "settings" "lock" "65")(princ))
-
-;Set Plot setting for current layout
-(defun c:pts()(command "_script" "PlotSettings.scr")(princ))
+;set plot setting for current layout
+(defun c:pts()
+(command "_script" "plotsettings.scr")
+(princ)
+)
 
 ;zoom to revision list
-(defun c:zr()(command "zoom" "31.85,3.48" "35.6,6.4")(princ))
+(defun c:zr()
+(command "zoom" "31.85,3.48" "35.6,6.4")
+(princ)
+)
 
-;VIWPORT FREEZE 0 LAYER IN A SELECTED VIWPORT
-(DEFUN C:T0()(COMMAND "VPLAYER" "FREEZE" "0" "SELECT")(PRINC))
+;viwport freeze 0 layer in a selected viwport
+(defun c:t0()
+(command "vplayer" "freeze" "0" "select")
+(princ)
+)
 
-;CHANGE LAYER TO G-Anno-Nplt AND START MVIEW COMMAND
-(defun c:vs()(command "clayer" "G-Anno-Nplt")(command "mview"))
+;change layer to g-anno-nplt and start mview command
+(defun c:vs()
+(command "clayer" "g-anno-nplt")
+(command "mview")
+(princ)
+)
 
-;SET PDMODE TO 3 THEN RUN DIVIDE COMMAND
-(defun c:ddv()(command "pdmode" "3")(command "divide")(princ))
+;set pdmode to 3 then run divide command
+(defun c:ddv()
+(command "pdmode" "3")
+(command "divide")
+(princ)
+)
 
-;CREATE 01-DELETE LAYER
-(defun c:md()(command "-layer" "new" "01-Delete" "color" "red" "01-Delete" "freeze" "01-Delete" "plot" "no" "01-Delete" "")(princ))
+;create 01-delete layer
+(defun c:md()
+(command "-layer" "new" "01-delete" "color" "red" "01-delete" "freeze" "01-delete" "plot" "no" "01-delete" "")
+(princ)
+)
 
-;TURN OFF ALL THE XREF LAYERS
-(defun c:xro()(command "-layer" "off" "*|*" "")(PRINC))
+;thaw 01-delete layer
+(defun c:t1()
+(command "-layer" "thaw" "01-delete" "")
+(command "vplayer" "thaw" "01-delete" "")
+(princ)
+)
 
-;SELECT ALL AND MOVE TO "0" LAYER
-(defun c:a0()(command "chprop" "all" "" "layer" "0" "")(princ))
+;freeze 01-delete layer
+(defun c:f1()
+(command "-layer" "freeze" "01-delete" "")
+(princ)
+)
 
-;MOVE SELECTION TO "01-DELETE" LAYER
+;turn off all the xref layers
+(defun c:xro()
+(command "-layer" "off" "*|*" "")
+(princ)
+)
+
+;select all and move to "0" layer
+(defun c:a0()
+(command "chprop" "all" "" "layer" "0" "")
+(princ)
+)
+
+;move selection to "01-delete" layer
 (defun c:d1()
-(command "chprop" (ssget)"" "la" "01-Delete" "")
-(princ))
+(command "chprop" (ssget)"" "la" "01-delete" "")
+(princ)
+)
 
 ;turn off osnap, start move command, then set osmode back 6591
 (defun c:mf()
 (command "osmode" "0")
+(command "orthomode" "0")
+(command "autosnap" "0")
 (command "move" (ssget)"")
-(c:65)
+(princ)
 )
 
-;Pick UCS, set snap to midpoint and pasteclip 
+(defun c:mo()
+(command "osmode" "6591")
+(command "move" (ssget)"")
+(princ)
+)
+
+;move an object by picking it's center and placing it in the mid of two chosen points
+(defun c:m,()
+(command "osmode" "10")
+(command "move" (ssget)"" "m2p" pause "m2p" pause)
+(princ)
+)
+
+;Pick UCS and place meter location at mid of chosen points 
 (defun c:11()
 (command "osmode" "1")
-(command "ucs" pause pause "")
-(command "osmode" "2")
-(command "pasteclip" pause)
+(setq pa (getpoint))
+(setq pb (getpoint))
+(setq p1 (trans pa 1 0))
+(setq p2 (trans pb 1 0))
+(command "ucs" "3p" p1 p2 "")
+(command "-insert" "FilledSemi" "m2p" (trans p1 0 1) (trans p2 0 1)"1" "1" "0")
 (command "osmode" "6591")
 (command "ucs" "world")
-(princ))
+(princ)
+)
 
+;places meter and transformer on trinitas site plans
 (defun c:22()
 (command "osmode" "0")
 (command "ucs" "world")
 (command "-insert" "SiteMeter" pause "1" "1" "0")
-(command "-insert" "SiteTransformer" pause "1" "1" "0")
-(command "osmode" "6591")
-(princ))
+;(command "-insert" "SiteTransformer" pause "1" "1" "0")
+;(command "osmode" "8")
+;(command "pline" pause pause pause "")
+;(command "trim" pause)
+(princ)(c:65)
+)
 
+;places a point "between two points"
 (defun c:33()
-(command "osmode" "2")
+(command "osmode" "139")
 (command "point" "m2p" pause)
 (command "osmode" "6591")
-(princ))
+(princ)
+)
 
-(defun c:44()
-(command "ucs" "ob" pause)
-(c:00)
-(command "trim" "" pause "")
+;places pointers for meters on trinitas site plans
+(defun c:45()
+(command "osmode" "136")
+(setq pa (getpoint))
+(setq pb (getpoint))
+(setq p1 (trans pa 1 0))
+(setq p2 (trans pb 1 0))
+(command "ucs" "3p"(trans p1 0 1)(trans p2 0 1)"")
+(command "-insert" "MeterPoint" "0,0,0" "1" "1" "0")
+(command "line" "127,0,0" (trans p2 0 1) "")
 (command "ucs" "world")
 (princ))
 
-;Create lines for for electrical notes placement
-;(defun c:nl()
-;(setq oldlayer(getvar "clayer"))
-;(setq placepoint (getpoint))
-;(setvar "clayer" "g-anno-nplt")
-;(command "line" placepoint "@-.5,0" ""
-;	"line" "@.5,-.24586147" "@-.5,0" ""
-;	"line" "@.5,-.15625" "@-.5,0" ""
-;	"line" "@.5,-.15625" "@-.5,0" ""
-;	"line" "@.5,-.15625" "@-.5,0" ""
-;	"line" "@.5,-.15625" "@-.5,0" ""
-;	"line" "@.5,-.15625" "@-.5,0" ""
-;	"line" "@.5,-.15625" "@-.5,0" ""
-;	"line" "@.5,-.15625" "@-.5,0" ""
-;	"line" "@.5,-.15625" "@-.5,0" ""
-;	"line" "@.5,-.15625" "@-.5,0" ""
-;	"line" "@.5,-.15625" "@-.5,0" ""
-;	"line" "@.5,-.15625" "@-.5,0" ""
-;	"line" "@.5,-.15625" "@-.5,0" ""
-;	"line" "@.5,-.15625" "@-.5,0" ""
-;	"line" "@.5,-.15625" "@-.5,0" ""
-;	"line" "@.5,-.15625" "@-.5,0" ""
-;	"line" "@.5,-.15625" "@-.5,0" ""
-;	"line" "@.5,-.15625" "@-.5,0" ""
-;	"line" "@.5,-.15625" "@-.5,0" ""
-;	"line" "@.5,-.15625" "@-.5,0" ""
-;)
-;(setvar "clayer" oldlayer)
-;(princ))
+;creates guidlines for placing conduit lines on trinitas site plans
+(defun c:55()
+(command "osmode" "3")
+(setq pa (getpoint))
+(setq pb (getpoint))
+(setq pc (getpoint))
+(setq pd (getpoint))
+(setq p1 (trans pa 1 0))
+(setq p2 (trans pb 1 0))
+(setq p3 (trans pc 1 0))
+(setq p4 (trans pd 1 0))
+(command "ucs" "3p" "m2p"(trans p1 0 1)(trans p2 0 1) "m2p"(trans p3 0 1)(trans p4 0 1)"")
+(command "xline" "h" "m2p" (trans p1 0 1)(trans p2 0 1)"")
+(command "xline" "v" (trans p1 0 1)(trans p3 0 1)(trans p4 0 1)"")
+(command "osmode" "168")
+(command "pline" (trans p4 0 1) pause)
+(command "ucs" "world")
+(princ))
 
-;(defun c:ad()
-;(setq hinge (getpoint "Hinge Point?"))
-;(setq latch (getpoint "Latch Point?"))
-;(setq direction (getpoint "Direction?"))
-;(command "circle" hinge latch)
-;(command "rectang" latch 
-;(princ))
+;set ucs to 0,0,0 but oriented to current view, and sets osmode to 6591
+(defun c:cd()
+(c:csv)
+(c:65)
+(princ))
 
-;(defun c:ssp()(command "select" "previous"))
+;set radius to 48" and fillet
+(defun c:f2()
+(command "filletrad" "48")
+(command "fillet" "polyline" pause)
+(princ)
+)
 
-;(defun c:sz()
-;(setq z1 (getpoint "FIRST POINT?"))
-;(setq z2 (getpoint "SECOND POINT?"))
-;(command "zoom" z1 z2)
-;(princ))
-
-;(defun c:zag()
-;(command "zoom" z1 z2)
-;(princ))
-
+;set radius to 0 and fillet
+(defun c:f3()
+(command "filletrad" "0")
+(command "fillet" "polyline" pause)
+(princ)
+)
 
 ;Set ucs to World 0,0,0, but facing current view direction
-(defun c:csv()(command "ucs" "world")(command "ucs" "view")(princ))
-
+(defun c:csv()
+(command "ucs" "world")
+(command "ucs" "view")
+(princ)
+)
 
 ;set offset for door frames
-(defun c:o2()(command "offset" "erase" "yes" "2")(princ))
+(defun c:o2()
+(command "offset" "erase" "yes" "2")
+(princ)
+)
 
 ;set offset erase to NO
-(defun c:o0()(command "offset" "erase" "no" "" "")(princ))
+(defun c:o0()
+(command "offset" "erase" "no" "" "")
+(princ)
+)
 
-;Unload an xref
-(defun c:xru()(command "xrefunload")(princ))
+;Unload a chosen xref
+(defun c:xru()
+(command "xrefunload")
+(princ)
+)
 
-;(defun c:88()(c:pts)(c:00)(princ))
-
-;(defun c:88()(c:pts)(princ))
-
-;(command "-layer" "color" "27" "defpoints" "")(c:zc)
-
-;(c:mz)
-
-;(c:dpl)(c:zc)
-
+;sets current layer to "0"
 (defun c:cl0()
 (command "clayer" "0")
-(princ))
+(princ)
+)
 
+;thaws defpoints layer in current viewport
 (defun c:dpl()
 (command "vplayer" "thaw" "defpoints" "current" "")
-(princ))
+(princ)
+)
 
 ;Layer settings for electrical sheets using the Clubhouse Plan Xrefs. From Bloomington.
 (defun c:clubla()
 (setq gfreeze
-"\"*|*A-Patt-160,*|*A-Wall-Patt-1Hr,*|*A-Flor-ADA,*|*wipeout,*|*s-grid,*|*A-FURN-SITE-PATT,*|*A-Wall-Patt,*|*A-Flor-Patt,*|*A-FLOR-MILL-BELO,*|*A-WALL-FILL-120,*|*A-Anno-Note,*|*A-ANNO-IDEN-CLNG\"")
+"\"*|A-Patt-160,*|A-Wall-Patt-1Hr,*|A-Flor-ADA,*|wipeout,*|s-grid,*|A-FURN-SITE-PATT,*|A-Wall-Patt,*|A-Flor-Patt,*|A-FLOR-MILL-BELO,*|A-WALL-FILL-120,*|A-Anno-Note,*|A-ANNO-IDEN-CLNG,*|A-Patt-110,*|A-FLOR-ADA_\"")
 (setq vfreeze
 "\"defpoints\"")
 (setq color80
-"\"*|*E-NOTE\"")
+"\"*|E-NOTE\"")
 (setq color50
-"\"*|*E-LITE-EQPM-N-D,*|*E-LITE-CLNG-N-D\"")
+"\"*|E-LITE-EQPM-N-D,*|*E-LITE-CLNG-N-D\"")
 (setq color240
-"\"*|*E-FIRE-EQPM-N-D\"")
+"\"*|E-FIRE-EQPM-N-D\"")
 (setq color210
-"\"*|*E-POWR-EQPM-N-D\"")
-(setq color253
-"\"*|*A-Conc-Patt,*|*A-FLOR-Flor,*|*A-ROOF-LINE,*|*Site-Lscp-Plnt,*|*A-FLOR-FNSH,*|*F-EQPT-FEC\"")
+"\"*|E-POWR-EQPM-N-D\"")
+(setq color252
+"\"*|A-Conc-Patt,*|A-FLOR-Flor,*|A-ROOF-LINE,*|Site-Lscp-Plnt,*|A-FLOR-FNSH,*|F-EQPT-FEC,*|A-FURN-SITE,*|3DTERRAIN\"")
 (command "vplayer" "freeze" gfreeze "all" "freeze" vfreeze "x" "")
 (command "-layer" "freeze" gfreeze "")
 (command "-layer" "color" "80" color80
 "color" "240" color240
 "color" "210" color210
-"color" "253" color253
+"color" "252" color252
 "color" "50" color50 "")
-(princ))
+(princ)
+)
 
+;Layer settings for electrical site plan using the Clubhouse Plan Xrefs. From Bloomington.
 (defun c:sitela()
 (setq gfreeze
 "\"*|*A-Anno-Note,*|*A-Patt-160,*|*A-Wall-Patt-1Hr,*|*A-Flor-ADA,*|*wipeout,*|*s-grid,*|*A-FURN-SITE-PATT,*|*A-Wall-Patt,*|*A-Flor-Patt,*|*A-FLOR-MILL-BELO,*|*A-WALL-FILL-120,*|*A-Anno-Note,*|*A-ANNO-IDEN-CLNG,*|*E-NOTE,*|*E-LITE-EQPM-N-D,*|*E-POWR-EQPM-N-D,*|*A-Conc-Patt,*|*A-ROOF-LINE,*|*Site-Lscp-Plnt,*|*F-EQPT-FEC,*|*A-Site-Hatch,*|*furn*,*|*fixt*,*|*fire*\"")
@@ -362,36 +569,72 @@
 "\"defpoints\"")
 (command "vplayer" "freeze" gfreeze "all" "freeze" vfreeze "x" "")
 (command "-layer" "freeze" gfreeze "")
-(princ))
+(princ)
+)
+
+;Layer settings for electrical sheets using the Unit Plan Xrefs. From Bloomington.
+(defun c:unitla()
+	(setq gfreeze
+		"\"*|A-Mill-Cabs-Hidn,*|SCREEN-B,*|PLAN NORTH,*|A-Clng-Bkhd,*|A-FLOR-ADA\"")
+	(setq vfreeze
+		"\"defpoints,*|M-Hvac-Duct-Retn\"")
+	(setq color80
+		"\"*|E-NOTE\"")
+	(setq color50
+		"\"*|E-LITE-EQPM-N-D,*|*E-LITE-CLNG-N-D,*|E-LITE-WALL-N-D\"")
+	(setq color240
+		"\"*|E-FIRE-EQPM-N-D\"")
+	(setq color210
+		"\"*|E-POWR-EQPM-N-D\"")
+	(setq color252
+		"\"*|A-Wall-Hidn,*|A-Wall-Hidn-GypB,*|A-APPL,*|A-APPL-ANNO,*|M-HVAC-EQPT,*|A-Flor-Stair-Riser,*|A-ABOVE,*|A-MILL-UPPR\"")
+	(setq color250
+		"\"*|M-Hvac-Duct-Retn\"")
+	(command "vplayer" "freeze" gfreeze "all" "freeze" vfreeze "x" "")
+	(command "-layer" "freeze" gfreeze "")
+	(command "-layer" "color" "80" color80
+		"color" "240" color240
+		"color" "210" color210
+		"color" "252" color252
+		"color" "250" color250
+		"color" "50" color50 "")
+(princ)
+)
 
 ;ZOOM TO THE PAPERSPACE SECTION OF THE SYMBOLS LIBRARY
 (defun c:zp()
 (command "zoom" "-3679,-117,0" "@77,134,0")
-(princ))
+(princ)
+)
 
+;freezes defpoints layer in all viewports except current page layout
 (defun c:dpf()
 (command "-layer" "color" "27" "Defpoints" "")
 (command "vplayer" "freeze" "defpoints" "all" "")
 (command "vplayer" "thaw" "defpoints" "current" "")
-(princ))
+(princ)
+)
 
+;sets offset erase to yes
 (defun c:oe()
 (command "offset" "erase" "yes" "" "")
-(princ))
+(princ)
+)
 
 ;COPIES NAME OF CURRENT LAYER TO CLIPBOARD
 (defun c:cpla()
-(vlax-invoke
-    (vlax-get (vlax-get (vlax-create-object "htmlfile") 'ParentWindow) 'ClipBoardData)
-    'setData
-    "TEXT"
-    (getvar 'clayer)
+	(vlax-invoke
+		(vlax-get (vlax-get (vlax-create-object "htmlfile") 'ParentWindow) 'ClipBoardData)
+		'setData
+		"TEXT"
+		(getvar 'clayer)
+	)
+(princ)
 )
-(princ))
 
 
 
-;;
+;not sure that this works
 (defun c:vpfrzlist ()
 (setq ent ( car (entsel "\nSelect the viewport ")))
 (setq en (entget ent))
@@ -407,5 +650,57 @@
 (if layerlist1
 (princ layerlist1)
 )
+(princ)
+)
+
+;inserts blocks for electrical plan note placement
+(defun c:ew()
+(command "-insert" "*ElecNoteWheel.dwg" pause "1" "0")
+(princ)
+)
+
+(defun c:we()
+(command "-insert" "*ElecNoteWheel-2.dwg" pause "1" "0")
+(princ)
+)
+
+(defun c:e1()
+(command "-insert" "*Enote1" pause "1" "0")
+(princ)
+)
+
+(defun c:e2()
+(command "-insert" "*Enote2" pause "1" "0")
+(princ)
+)
+
+(defun c:e3()
+(command "-insert" "*Enote3" pause "1" "0")
+(princ)
+)
+
+(defun c:e4()
+(command "-insert" "*Enote4" pause "1" "0")
+(princ)
+)
+
+(defun c:e5()
+(command "-insert" "*Enote5" pause "1" "0")
+(princ)
+)
+
+(defun c:e6()
+(command "-insert" "*Enote6" pause "1" "0")
+(princ)
+)
+
+
+;divides a pline that I use for finding locations of receptacles in a room
+(defun c:dvr()
+(c:p3)
+(setq Wall_Length (vla-get-length (vlax-ename->vla-object (car (entsel)))))
+(setq ByThree (/ Wall_Length 36))
+(setq R_Space (1+(fix ByThree)))
+(command "divide" pause R_Space)
 (princ)
 )
