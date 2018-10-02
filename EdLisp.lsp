@@ -39,13 +39,25 @@
 (princ)
 )
 
-;zoom all layouts to 24x36 sheet, save file, and close.
+;turn on all the layers
+;lock all the viewports
+;rotate model space to be WCS
+;turn attribute dialogs back on
+;zoom all layouts to 24x36 sheet
+;set pdmode to 3
+;change current layer to 0
+;save file, and close.
 (defun c:zc()
 (command "layon")
 (c:lockvp)
 (c:mz)
-(foreach layout(layoutlist)(setvar "ctab" layout)(command "zoom" "0,0,0" "@36,24"))
+(c:ret)
+(command "attdia" "1")
+(command "filedia" "1")
+(c:arch)
+(foreach layout(layoutlist)(setvar "ctab" layout)(command "ucs" "world")(command "zoom" "0,0,0" "@36,24"))
 (c:p0)
+(c:l0)
 (command "qsave")
 (command "close")
 (princ)
@@ -187,7 +199,10 @@
 
 ;zoom extents, save and close
 (defun c:zec()
+(c:arch)
+(command "layon")
 (c:p0)
+(c:l0)
 (command "zoom" "extents" "qsave" "close")
 (princ)
 )
@@ -223,27 +238,30 @@
 		"new" "ab-wall" 
 			"color" "80" "ab-wall" 
 		"new" "ab-dashed" 
-			"color" "red" "ab-dashed" 
+			"color" "1" "ab-dashed" 
 			"ltype" "hidden" "ab-dashed" 
 		"new" "ab-elec" 
 			"color" "210" "ab-elec" 
 		"new" "ab-stair-rail" 
-			"color" "red" "ab-stair-rail" 
+			"color" "1" "ab-stair-rail" 
 		"new" "ab-door" 
-			"color" "red" "ab-door" 
+			"color" "1" "ab-door" 
 		"new" "ab-floor" 
-			"color" "red" "ab-floor" 
+			"color" "1" "ab-floor" 
 		"new" "ab-window" 
-			"color" "red" "ab-window" 
+			"color" "1" "ab-window" 
 		"new" "ab-roof" 
 			"color" "magenta" "ab-roof" 
 		"new" "ab-fixt" 
-			"color" "red" "ab-fixt"
+			"color" "1" "ab-fixt"
 		"new" "ab-column" 
 			"color" "cyan" "ab-column"
 		"new" "ab-beam" 
-			"color" "red" "ab-beam"
+			"color" "1" "ab-beam"
 			"ltype" "center" "ab-beam"
+		"new" "ab-iden" 
+			"color" "4" "ab-iden"
+			"plot" "no" "ab-iden"
 	"")
 (command "clayer" "ab-wall")
 (command "insert" "kjg north arrow.dwg=" #nil)
@@ -270,6 +288,7 @@
 
 ;insert note spacing block
 (defun c:nl()
+(c:dpl)
 (command "insert" "notespacing.dwg" pause "1" "1" "0")
 (princ)
 )
@@ -289,11 +308,14 @@
 )
 
 
-;lock all the viewports, set xrefoverride to "1" and make all the xref layers gray
+;lock all the viewports, set xrefoverride to "1" and make all the xref layers gray except for Seal and Logos
 (defun c:xgray()
 (c:lockvp)
 (command "xrefoverride" "1")
 (command "-layer" "color" "8" "*|*" "color" "252" "*furn*" "color" "252" "*fix*" "")
+(command "visretain" "0")
+(command "-xref" "reload" "*seal*")
+(command "visretain" "1")
 (princ)
 )
 
@@ -323,6 +345,7 @@
 
 ;set plot setting for current layout
 (defun c:pts()
+(command "-layer" "color" "7" "G-Anno-Ttlb" "")
 (command "_script" "plotsettings.scr")
 (princ)
 )
@@ -355,14 +378,13 @@
 
 ;create 01-delete layer
 (defun c:md()
-(command "-layer" "new" "01-delete" "color" "red" "01-delete" "freeze" "01-delete" "plot" "no" "01-delete" "")
+(command "-layer" "new" "01-delete" "color" "1" "01-delete" "freeze" "01-delete" "plot" "no" "01-delete" "")
 (princ)
 )
 
 ;thaw 01-delete layer
 (defun c:t1()
 (command "-layer" "thaw" "01-delete" "")
-(command "vplayer" "thaw" "01-delete" "")
 (princ)
 )
 
@@ -524,8 +546,20 @@
 )
 
 ;sets current layer to "0"
-(defun c:cl0()
+(defun c:L0()
 (command "clayer" "0")
+(princ)
+)
+
+;sets current layer to "E-LITE-EQPM-N-D"
+(defun c:L1()
+(command "clayer" "E-LITE-EQPM-N-D")
+(princ)
+)
+
+;sets current layer to "E-POWR-CIRC-N-D"
+(defun c:L2()
+(command "clayer" "E-POWR-CIRC-N-D")
 (princ)
 )
 
@@ -623,18 +657,21 @@
 
 ;COPIES NAME OF CURRENT LAYER TO CLIPBOARD
 (defun c:cpla()
+(command "laymcur")
 	(vlax-invoke
 		(vlax-get (vlax-get (vlax-create-object "htmlfile") 'ParentWindow) 'ClipBoardData)
 		'setData
 		"TEXT"
 		(getvar 'clayer)
 	)
+(command "clayer" "0")
 (princ)
 )
 
 
 
 ;not sure that this works
+;attempting to export a list of all layers that are frozen in a particular viewport
 (defun c:vpfrzlist ()
 (setq ent ( car (entsel "\nSelect the viewport ")))
 (setq en (entget ent))
@@ -702,5 +739,168 @@
 (setq ByThree (/ Wall_Length 36))
 (setq R_Space (1+(fix ByThree)))
 (command "divide" pause R_Space)
+(princ)
+)
+
+;freeze a layer both in viewport and in modelspace
+(defun c:kl()
+(setq kill-layer (getstring "What Layer?"))
+(command "vplayer" "freeze" kill-layer "all" "")
+(command "-layer" "freeze" kill-layer "")
+(princ)
+)
+
+;unlock all layers
+(defun c:ula()
+(command "-layer" "unlock" "*" "")
+(princ)
+)
+
+;rotates model space view to FRONT but leaves the UCS to WORLD.
+;Handy for finding objects in a 2D drawing that are in a plane other the "Z" elevation of "0"
+(defun c:front()
+(command "-view" "front")
+(command "ucs" "world")
+(princ)
+)
+
+;Returns the view and UCS to the normal TOP view. 
+(defun c:top()
+(command "ucs" "world")
+(command "plan" "current")
+(princ)
+)
+
+;rotates the model space view to SOUTHWEST ISOMETRIC but leaves the UCS to WORLD. 
+;Handy for finding objects in a 2D drawing that are in a plane other the "Z" elevation of "0"
+(defun c:iso()
+(command "-view" "swiso")
+(command "ucs" "world")
+(princ)
+)
+
+(defun c:pn()
+(command "clayer" "e-note")
+(command "attdia" "0")
+(command "-insert" "h21" pause "1" "1" "0")
+(princ)
+)
+
+(defun c:df()
+(command "chprop" (ssget)"" "la" "E-POWR-CIRC-NUMB" "")
+(princ)
+)
+
+(defun c:gf()
+(command "laymcur")
+(command "-layer" "color" "4" "" "")
+(princ)
+)
+
+(defun c:dx()
+(command "-bedit")
+(c:a0)
+(command "bclose" "")
+(princ)
+)
+
+(defun c:iu()
+(command "attdia" "0")
+(command "-insert" "qsym" pause "1" "1" "0")
+(princ)
+)
+
+;insert note location block
+(defun c:n0()
+(command "insert" "*NoteLocation.dwg" "0,0,0" "" "" "")
+(princ)
+)
+
+;insert note location block
+(defun c:ng()
+(command "ucs" "world")
+(c:65)
+(command "insert" "NoteGuides.dwg=" "0,0,0" "" "" "")
+(princ)
+)
+
+(defun c:lel()
+(load "edslisp.lsp")
+(princ)
+)
+
+
+
+
+
+(defun C:P9 (/ I LW P1 P2 P3)
+                ;|
+*****************************************************************************************
+
+by ElpanovEvgeniy
+
+Замена линейного сегмента полилинии дуговым сегментом
+
+Впервые опубликована
+http://www.caduser.ru/cgi-bin/f1/board.cgi?t=20707ki
+
+Дата создания   19.09.2005
+Последняя редакция 04.06.2006
+*****************************************************************************************
+
+Replacement of a linear segment of a polyline with an arc segment
+
+For the first time it is published
+http://www.caduser.ru/cgi-bin/f1/board.cgi?t=20707ki
+
+Date of creation   19.09.2005
+Last edition       04.06.2006
+*****************************************************************************************
+
+
+(C:P9)
+
+*****************************************************************************************
+|;
+ (vl-load-com)
+ (or doc (setq doc (vla-get-ActiveDocument (vlax-get-acad-object))))
+ (if (and (setq lw (entsel "\n Select segment in a polyline. "))
+          (= (cdr (assoc 0 (entget (car lw)))) "LWPOLYLINE")
+     ) ;_  and
+  (progn
+   (setq i  (fix (vlax-curve-getParamAtPoint
+                  (car lw)
+                  (vlax-curve-getClosestPointTo (car lw) (cadr lw))
+                 ) ;_  vlax-curve-getParamAtPoint
+            ) ;_  fix
+         p1 (vlax-curve-getPointAtParam (car lw) i)
+         p3 (vlax-curve-getPointAtParam (car lw) (1+ i))
+         lw (vlax-ename->vla-object (car lw))
+   ) ;_  setq
+   (princ "\n Set visually curvature of a segment. ")
+   (vla-StartUndoMark doc)
+   (while (and (setq p2 (grread 5)) (= (car p2) 5))
+    (vla-SetBulge
+     lw
+     i
+     ((lambda (a) (/ (sin a) (cos a)))
+      (/ (- (angle (cadr p2) p3) (angle p1 (cadr p2))) 2.)
+     )
+    ) ;_  vla-SetBulge
+   ) ;_  while
+   (vla-EndUndoMark doc)
+  ) ;_  progn
+  (princ "\n It is select nothing or object not a polyline. ")
+ ) ;_  if
+) ;_  defun
+
+
+(defun c:dec()
+(command "-units" "2" "8" "1" "2" "0.00" "no")
+(princ)
+)
+
+(defun c:arch()
+(command "-units" "4" "32" "1" "2" "0.00" "no")
 (princ)
 )
