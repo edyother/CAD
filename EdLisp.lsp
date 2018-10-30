@@ -356,6 +356,12 @@
 (princ)
 )
 
+;zoom to project name
+(defun c:zt()
+(command "zoom" "32.6,10.1" "35.24,17.21")
+(princ)
+)
+
 ;viwport freeze 0 layer in a selected viwport
 (defun c:t0()
 (command "vplayer" "freeze" "0" "select")
@@ -733,6 +739,7 @@
 
 
 ;divides a pline that I use for finding locations of receptacles in a room
+;so far I still have to select the pline twice
 (defun c:dvr()
 (c:p3)
 (setq Wall_Length (vla-get-length (vlax-ename->vla-object (car (entsel)))))
@@ -824,6 +831,8 @@
 (princ)
 )
 
+;Load EdsLisp
+;You'll need to change the filename to be yours. If it doesn't work you might have to change the folder it's in to be in Autocad's searchable path? Or you might be able to get away with making the filename include the complete path. 
 (defun c:lel()
 (load "edslisp.lsp")
 (princ)
