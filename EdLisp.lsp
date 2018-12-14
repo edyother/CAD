@@ -3,15 +3,33 @@
 
 ;sets the osnap and polar the way i usually like it
 (defun c:65()
+(command "snap" "off")
 (command "osmode" "6591")
 (command "autosnap" "63")
 (princ))
 
 ;turns off osnap and polar
 (defun c:66()
+(command "snap" "off")
 (command "osmode" "0")
 (command "autosnap" "0")
 (princ))
+
+(defun c:gg()
+(command "osmode" "0")
+(command "autosnap" "0")
+(command "snap" "on")
+(command "snap" "aspect" "24" "24")
+(princ)
+)
+
+(defun c:gh()
+(command "osmode" "0")
+(command "autosnap" "0")
+(command "snap" "on")
+(command "snap" "aspect" "12" "12")
+(princ)
+)
 
 ;allows you to change all layers of one color to another color
 (defun c:colorchange (/ c1 c2 )
@@ -48,6 +66,7 @@
 ;change current layer to 0
 ;save file, and close.
 (defun c:zc()
+(command "layerclose")
 (command "layon")
 (c:lockvp)
 (c:mz)
@@ -63,22 +82,26 @@
 (princ)
 )
 
-;change layer to 0 then start xref command.
-(defun c:ix()
-(command "clayer" "0")
-(command "-xref")
-(princ)
-)
+;change layer to 0 then choose file to xref and insert at 0,0,0 and zoom to extents.
+;(defun c:ix()
+;	(command "clayer" "0")
+;	(command "-xref" "o" 
+;		(getfiled "choose file" "g:/" "dwg" 0)
+;	"0,0,0" "1" "1" "0")
+;	(command "zoom" "extents")
+;(princ)
+;)
 
 ;change layer to 0 then choose file to xref and insert at 0,0,0 and zoom to extents.
 (defun c:ix()
+	(command "filedia" "0")
 	(command "clayer" "0")
-	(command "-xref" "o" 
-		(getfiled "choose file" "g:/" "dwg" 0)
-	"0,0,0" "1" "1" "0")
+	(command "-xref" "o" pause "0,0,0" "1" "1" "0")
 	(command "zoom" "extents")
+	(command "filedia" "1")
 (princ)
 )
+
 
 ;change layer to g-anno-nplt.
 (defun c:np()
@@ -156,8 +179,8 @@
 
 ;vertial and horizontal xlines at 0,0,0
 (defun c:x0()
-(command "xline" "vertical" "0,0,0" "")
-(command "xline" "horizontal" "0,0,0" "")
+(command "xline" "ver" "0,0,0" "")
+(command "xline" "hor" "0,0,0" "")
 (princ)
 )
 
@@ -197,12 +220,16 @@
 (command "copy" (ssget) "" "0,0,0" "0,0,0")
 (princ))
 
-;zoom extents, save and close
+;switch to model tab, zoom extents, save and close
 (defun c:zec()
-(c:arch)
+(command "layerclose")
 (command "layon")
+(command "attdia" "1")
+(command "filedia" "1")
+(c:arch)
 (c:p0)
 (c:l0)
+(command "model")
 (command "zoom" "extents" "qsave" "close")
 (princ)
 )
@@ -231,6 +258,7 @@
 
 ;purge and set up new layers for as built drawing
 (defun c:asbl()
+	(command "-xref" "detach" "*")
 	(command "-purge" "layers" "*" "no")
 	(command "-purge" "blocks" "*" "no")
 	(command "-layer" 
@@ -264,7 +292,7 @@
 			"plot" "no" "ab-iden"
 	"")
 (command "clayer" "ab-wall")
-(command "insert" "kjg north arrow.dwg=" #nil)
+(command "insert" "kjg north arrow=kjg north arrow.dwg" #nil)
 (princ)
 )
 
@@ -279,17 +307,30 @@
 	(command "-purge" "layers" "*" "no")
 	(command "-purge" "blocks" "*" "no")
 	(c:mz)
-	(command "insert" "elec common layers.dwg=" "0,0,0" "1" "1" "0")
-	(command "insert" "kjg north arrow.dwg=" #nil)
-	(command "insert" "h21=" #nil)
-	(command "insert" "c-notewheel=" #nil)
+	(command "insert" "elec common layers=elec common layers.dwg" "0,0,0" "1" "1" "0")
+	(command "insert" "kjg north arrow=kjg north arrow.dwg" #nil)
+	(command "insert" "h21=h21.dwg" #nil)
+	(command "insert" "c-notewheel=c-notewheel.dwg" #nil)
+(princ)
+)
+
+;For IU Projects 
+;setup electrical layers purge all unused layers. purge all unused blocks. insert all the electrical common layers. insert the version of the kjg north arrow that i fixed.
+(defun c:suiu()
+	(command "-purge" "layers" "*" "no")
+	(command "-purge" "blocks" "*" "no")
+	(c:mz)
+	(command "insert" "IU_Electrical=IU_Electrical.dwg" "0,0,0" "1" "1" "0")
+	(command "insert" "kjg north arrow=kjg north arrow.dwg" #nil)
+	(command "insert" "h21=h21.dwg" #nil)
+	(command "insert" "c-notewheel=c-notewheel.dwg" #nil)
 (princ)
 )
 
 ;insert note spacing block
 (defun c:nl()
 (c:dpl)
-(command "insert" "notespacing.dwg" pause "1" "1" "0")
+(command "insert" "notespacing=notespacing.dwg" pause "1" "1" "0")
 (princ)
 )
 
@@ -312,7 +353,7 @@
 (defun c:xgray()
 (c:lockvp)
 (command "xrefoverride" "1")
-(command "-layer" "color" "8" "*|*" "color" "252" "*furn*" "color" "252" "*fix*" "")
+(command "-layer" "color" "8" "*|*" "color" "253" "*furn*" "color" "253" "*fix*" "")
 (command "visretain" "0")
 (command "-xref" "reload" "*seal*")
 (command "visretain" "1")
@@ -359,6 +400,12 @@
 ;zoom to project name
 (defun c:zt()
 (command "zoom" "32.6,10.1" "35.24,17.21")
+(princ)
+)
+
+;zoom to project name
+(defun c:zn()
+(command "zoom" "27.5,16" "32.5,23.2")
 (princ)
 )
 
@@ -418,6 +465,26 @@
 (princ)
 )
 
+(defun c:vf()
+(command "chprop" (ssget)"" "la" "C-SITE-CURB-N" "")
+(princ)
+)
+
+(defun c:vd()
+(command "chprop" (ssget)"" "la" "C-SITE-STRIPE" "")
+(princ)
+)
+
+(defun c:w1()
+(command "chprop" (ssget)"" "la" "a-wall-opening" "")
+(princ)
+)
+
+(defun c:pe()
+(command "chprop" (ssget)"" "la" "e-powr-eqpm-e" "")
+(princ)
+)
+
 ;turn off osnap, start move command, then set osmode back 6591
 (defun c:mf()
 (command "osmode" "0")
@@ -454,6 +521,34 @@
 (princ)
 )
 
+;Pick UCS and place meter bank location at mid of chosen points 
+(defun c:121()
+(command "osmode" "1")
+(setq pa (getpoint))
+(setq pb (getpoint))
+(setq p1 (trans pa 1 0))
+(setq p2 (trans pb 1 0))
+(command "ucs" "3p" p1 p2 "")
+(command "-insert" "mct1" "m2p" (trans p1 0 1) (trans p2 0 1)"1" "1" "0")
+(command "osmode" "6591")
+(command "ucs" "world")
+(princ)
+)
+
+;Pick UCS and place meter bank location at mid of chosen points 
+(defun c:122()
+(command "osmode" "1")
+(setq pa (getpoint))
+(setq pb (getpoint))
+(setq p1 (trans pa 1 0))
+(setq p2 (trans pb 1 0))
+(command "ucs" "3p" p1 p2 "")
+(command "-insert" "mct2" "m2p" (trans p1 0 1) (trans p2 0 1)"1" "1" "0")
+(command "osmode" "6591")
+(command "ucs" "world")
+(princ)
+)
+
 ;places meter and transformer on trinitas site plans
 (defun c:22()
 (command "osmode" "0")
@@ -476,7 +571,7 @@
 
 ;places pointers for meters on trinitas site plans
 (defun c:45()
-(command "osmode" "136")
+(command "osmode" "8")
 (setq pa (getpoint))
 (setq pb (getpoint))
 (setq p1 (trans pa 1 0))
@@ -485,6 +580,7 @@
 (command "-insert" "MeterPoint" "0,0,0" "1" "1" "0")
 (command "line" "127,0,0" (trans p2 0 1) "")
 (command "ucs" "world")
+(c:65)
 (princ))
 
 ;creates guidlines for placing conduit lines on trinitas site plans
@@ -566,6 +662,12 @@
 ;sets current layer to "E-POWR-CIRC-N-D"
 (defun c:L2()
 (command "clayer" "E-POWR-CIRC-N-D")
+(princ)
+)
+
+;sets current layer to "E-POWR-CIRC-NUMB"
+(defun c:L3()
+(command "clayer" "E-POWR-CIRC-NUMB")
 (princ)
 )
 
@@ -708,32 +810,44 @@
 )
 
 (defun c:e1()
+(c:66)
 (command "-insert" "*Enote1" pause "1" "0")
+(c:65)
 (princ)
 )
 
 (defun c:e2()
+(c:66)
 (command "-insert" "*Enote2" pause "1" "0")
+(c:65)
 (princ)
 )
 
 (defun c:e3()
+(c:66)
 (command "-insert" "*Enote3" pause "1" "0")
+(c:65)
 (princ)
 )
 
 (defun c:e4()
+(c:66)
 (command "-insert" "*Enote4" pause "1" "0")
+(c:65)
 (princ)
 )
 
 (defun c:e5()
+(c:66)
 (command "-insert" "*Enote5" pause "1" "0")
+(c:65)
 (princ)
 )
 
 (defun c:e6()
+(c:66)
 (command "-insert" "*Enote6" pause "1" "0")
+(c:65)
 (princ)
 )
 
@@ -743,8 +857,20 @@
 (defun c:dvr()
 (c:p3)
 (setq Wall_Length (vla-get-length (vlax-ename->vla-object (car (entsel)))))
-(setq ByThree (/ Wall_Length 36))
-(setq R_Space (1+(fix ByThree)))
+(setq ByX (/ Wall_Length 36))
+(setq R_Space (1+(fix ByX)))
+(command "divide" pause R_Space)
+(princ)
+)
+
+
+;divides a line or polyline into equial sections that are less than 12.5' each. for the purpose of place objects less than 25' apart. 
+;so far I still have to select the object twice
+(defun c:dv25()
+(c:p3)
+(setq Wall_Length (vla-get-length (vlax-ename->vla-object (car (entsel)))))
+(setq ByX (/ Wall_Length 150))
+(setq R_Space (1+(fix ByX)))
 (command "divide" pause R_Space)
 (princ)
 )
@@ -786,24 +912,28 @@
 (princ)
 )
 
+;insert H21 note number block and asks to manually input the attribute number.
 (defun c:pn()
 (command "clayer" "e-note")
 (command "attdia" "0")
-(command "-insert" "h21" pause "1" "1" "0")
+(command "-insert" "h21=h21.dwg" pause "1" "1" "0")
 (princ)
 )
 
+;moves a chosen object to the circuit number layer
 (defun c:df()
 (command "chprop" (ssget)"" "la" "E-POWR-CIRC-NUMB" "")
 (princ)
 )
 
+;changes the color of a chosen object's layer to cyan. I dont' remember why I made this.
 (defun c:gf()
 (command "laymcur")
 (command "-layer" "color" "4" "" "")
 (princ)
 )
 
+;opens Block Editor and changes all the layers of the block to "0". Then saves and closes the block.
 (defun c:dx()
 (command "-bedit")
 (c:a0)
@@ -811,6 +941,13 @@
 (princ)
 )
 
+(defun c:bv()
+(c:a0)
+(command "bclose" "")
+(princ)
+)
+
+;inserts "qsym" block. I dont' remember what qsym block is.
 (defun c:iu()
 (command "attdia" "0")
 (command "-insert" "qsym" pause "1" "1" "0")
@@ -823,11 +960,11 @@
 (princ)
 )
 
-;insert note location block
+;insert my note location guidelines block
 (defun c:ng()
 (command "ucs" "world")
 (c:65)
-(command "insert" "NoteGuides.dwg=" "0,0,0" "" "" "")
+(command "insert" "NoteGuides=NoteGuides.dwg" "0,0,0" "" "" "")
 (princ)
 )
 
@@ -904,12 +1041,99 @@ Last edition       04.06.2006
 ) ;_  defun
 
 
+;change drawing units to decimal
 (defun c:dec()
 (command "-units" "2" "8" "1" "2" "0.00" "no")
 (princ)
 )
 
+;change drawing units to architectural
 (defun c:arch()
 (command "-units" "4" "32" "1" "2" "0.00" "no")
+(princ)
+)
+
+;explode all groups
+(defun c:gn()
+(command "ungroup" "all" "yes")
+(princ)
+)
+
+;freeze the circuit number layer
+(defun c:fcn()
+(command "-layer" "freeze" "e-powr-circ-numb*" "")
+(princ)
+)
+
+;thaw the circuit number layer
+(defun c:tcn()
+(command "-layer" "thaw" "e-powr-circ-numb*" "")
+(princ)
+)
+
+;choose a piece of text to be justified "left"
+(defun c:jl()
+(command "justifytext" pause pause "left")
+(princ)
+)
+
+;choose a piece of text to be justified "right"
+(defun c:jr()
+(command "justifytext" pause pause "right")
+(princ)
+)
+
+;choose a piece of text to be justified "middle center"
+(defun c:jm()
+(command "justifytext" pause pause "mc")
+(princ)
+)
+
+;delete current page layout
+(defun c:ld()
+(command "layout" "delete" "")
+(princ)
+)
+
+;change a chosen layer to color 253
+(defun c:253()
+(setq c253 (getstring "What Layer?"))
+(command "-layer" "color" "253" c253 "")
+(princ)
+)
+
+;paste object at the "middle between two points"
+(defun c:pm()
+(command "pasteclip" "m2p" pause pause)
+(princ)
+)
+
+(defun c:dp0()
+(c:dp)
+(command "point" "0,0,0")
+(command "bclose" "")
+(princ)
+)
+
+(defun c:lk()
+(command "zoom" "extents")
+(command "laywalk")
+(princ)
+)
+
+(defun c:sz()
+(setq zoom_center (getpoint "Pick Center"))
+(setq x_val (car zoom_center))
+(setq y_val (cadr zoom_center))
+(setq z_val (caddr zoom_center))
+(setq zoom_level (getstring "Zoom Height?"))
+(command "zoom" "center" (list x_val y_val)(list zoom_level))
+(princ)
+)
+
+
+(defun c:ep()
+(command "erase")
+(command "pasteclip")
 (princ)
 )
