@@ -1,19 +1,59 @@
 ;makes the fillet command work again
 (command "redefine" "fillet")
 
+(defun c:dp0()
+(c:dp)
+(command "point" "0,0,0")
+(command "bclose" "")
+(princ)
+)
+
+;delete current page layout
+(defun c:ld()
+(command "layout" "delete" "")
+(princ)
+)
+
+;sets current layer to "0"
+(defun c:L0()
+(command "clayer" "0")
+(princ)
+)
+
+;Load EdsLisp
+;You'll need to change the filename to be yours. If it doesn't work you might have to change the folder it's in to be in Autocad's searchable path? Or you might be able to get away with making the filename include the complete path. 
+(defun c:lel()
+(load "edslisp.lsp")
+(princ)
+)
+
+;change drawing units to decimal
+(defun c:dec()
+(command "-units" "2" "8" "1" "2" "0.00" "no")
+(princ)
+)
+
+;change drawing units to architectural
+(defun c:arch()
+(command "-units" "4" "32" "1" "2" "0.00" "no")
+(princ)
+)
+
 ;sets the osnap and polar the way i usually like it
 (defun c:65()
 (command "snap" "off")
 (command "osmode" "6591")
 (command "autosnap" "63")
-(princ))
+(princ)
+)
 
 ;turns off osnap and polar
 (defun c:66()
 (command "snap" "off")
 (command "osmode" "0")
 (command "autosnap" "0")
-(princ))
+(princ)
+)
 
 (defun c:gg()
 (command "osmode" "0")
@@ -82,32 +122,12 @@
 (princ)
 )
 
-;change layer to 0 then choose file to xref and insert at 0,0,0 and zoom to extents.
-;(defun c:ix()
-;	(command "clayer" "0")
-;	(command "-xref" "o" 
-;		(getfiled "choose file" "g:/" "dwg" 0)
-;	"0,0,0" "1" "1" "0")
-;	(command "zoom" "extents")
-;(princ)
-;)
-
-;change layer to 0 then choose file to xref and insert at 0,0,0 and zoom to extents.
-(defun c:ix()
-	(command "filedia" "0")
-	(command "clayer" "0")
-	(command "-xref" "o" pause "0,0,0" "1" "1" "0")
-	(command "zoom" "extents")
-	(command "filedia" "1")
-(princ)
-)
-
-
 ;change layer to g-anno-nplt.
 (defun c:np()
 (command "clayer" "g-anno-nplt")
 (princ)
 )
+
 
 ;lock all viewports in current page layout.
 (defun c:lv()
@@ -218,7 +238,8 @@
 ;duplicate selected object is same location
 (defun c:dup()
 (command "copy" (ssget) "" "0,0,0" "0,0,0")
-(princ))
+(princ)
+)
 
 ;switch to model tab, zoom extents, save and close
 (defun c:zec()
@@ -360,6 +381,23 @@
 (princ)
 )
 
+;lock all the viewports, set xrefoverride to "1" and make all the xref layers color 150 except for Seal and Logos
+(defun c:iugray()
+(c:lockvp)
+(command "xrefoverride" "1")
+(command "-layer" "color" "150" "*|*" "color" "7" "*area*iden*" "")
+(command "visretain" "0")
+(command "-xref" "reload" "*seal*")
+(command "visretain" "1")
+(princ)
+)
+
+;switch to model tab
+(defun c:mm()
+(command "model")
+(princ)
+)
+
 ;switch to model tab and zoom to extents
 (defun c:mz()
 (command "model" "zoom" "extents")
@@ -390,6 +428,13 @@
 (command "_script" "plotsettings.scr")
 (princ)
 )
+
+;set plot setting for current layout
+(defun c:psiu()
+(command "_script" "PlotSettingsIU.scr")
+(princ)
+)
+
 
 ;zoom to revision list
 (defun c:zr()
@@ -581,7 +626,8 @@
 (command "line" "127,0,0" (trans p2 0 1) "")
 (command "ucs" "world")
 (c:65)
-(princ))
+(princ)
+)
 
 ;creates guidlines for placing conduit lines on trinitas site plans
 (defun c:55()
@@ -600,13 +646,15 @@
 (command "osmode" "168")
 (command "pline" (trans p4 0 1) pause)
 (command "ucs" "world")
-(princ))
+(princ)
+)
 
 ;set ucs to 0,0,0 but oriented to current view, and sets osmode to 6591
 (defun c:cd()
 (c:csv)
 (c:65)
-(princ))
+(princ)
+)
 
 ;set radius to 48" and fillet
 (defun c:f2()
@@ -647,12 +695,6 @@
 (princ)
 )
 
-;sets current layer to "0"
-(defun c:L0()
-(command "clayer" "0")
-(princ)
-)
-
 ;sets current layer to "E-LITE-EQPM-N-D"
 (defun c:L1()
 (command "clayer" "E-LITE-EQPM-N-D")
@@ -668,6 +710,12 @@
 ;sets current layer to "E-POWR-CIRC-NUMB"
 (defun c:L3()
 (command "clayer" "E-POWR-CIRC-NUMB")
+(princ)
+)
+
+;sets current layer to "E-POWR-CIRC-NUMB"
+(defun c:L4()
+(command "clayer" "E-POWR-IDEN-N-D")
 (princ)
 )
 
@@ -776,43 +824,24 @@
 (princ)
 )
 
-
-
-;not sure that this works
-;attempting to export a list of all layers that are frozen in a particular viewport
-(defun c:vpfrzlist ()
-(setq ent ( car (entsel "\nSelect the viewport ")))
-(setq en (entget ent))
-(setq layerlist1 nil)
-(setq itm (assoc 331 en))
-(setq en (cdr (member (assoc 331 en) en)))
-(while itm
-(setq txtitm (cdr (assoc 2 (entget (cdr itm)))))
-(setq layerlist1 (append layerlist1 (list txtitm)))
-(setq itm (assoc 331 en))
-(setq en (cdr (member (assoc 331 en) en)))
-)
-(if layerlist1
-(princ layerlist1)
-)
-(princ)
-)
-
 ;inserts blocks for electrical plan note placement
 (defun c:ew()
 (command "-insert" "*ElecNoteWheel.dwg" pause "1" "0")
 (princ)
 )
 
+;inserts block of electrical nots that allows e1 - e6 to work
 (defun c:we()
-(command "-insert" "*ElecNoteWheel-2.dwg" pause "1" "0")
+(command "-insert" "*ElecNoteWheel-2.dwg" #nil)
 (princ)
 )
 
+;the nex few are for placing electical note pointers. Must use "we" first.
 (defun c:e1()
 (c:66)
 (command "-insert" "*Enote1" pause "1" "0")
 (c:65)
+(c:pn)
 (princ)
 )
 
@@ -820,6 +849,7 @@
 (c:66)
 (command "-insert" "*Enote2" pause "1" "0")
 (c:65)
+(c:pn)
 (princ)
 )
 
@@ -827,6 +857,7 @@
 (c:66)
 (command "-insert" "*Enote3" pause "1" "0")
 (c:65)
+(c:pn)
 (princ)
 )
 
@@ -834,6 +865,7 @@
 (c:66)
 (command "-insert" "*Enote4" pause "1" "0")
 (c:65)
+(c:pn)
 (princ)
 )
 
@@ -841,6 +873,7 @@
 (c:66)
 (command "-insert" "*Enote5" pause "1" "0")
 (c:65)
+(c:pn)
 (princ)
 )
 
@@ -848,6 +881,7 @@
 (c:66)
 (command "-insert" "*Enote6" pause "1" "0")
 (c:65)
+(c:pn)
 (princ)
 )
 
@@ -915,6 +949,7 @@
 ;insert H21 note number block and asks to manually input the attribute number.
 (defun c:pn()
 (command "clayer" "e-note")
+(command "attreq" "1")
 (command "attdia" "0")
 (command "-insert" "h21=h21.dwg" pause "1" "1" "0")
 (princ)
@@ -923,6 +958,12 @@
 ;moves a chosen object to the circuit number layer
 (defun c:df()
 (command "chprop" (ssget)"" "la" "E-POWR-CIRC-NUMB" "")
+(princ)
+)
+
+;places selected object onto E-LITE-IDEN layer
+(defun c:ci()
+(command "chprop" "la" "E-LITE-IDEN" "")
 (princ)
 )
 
@@ -941,6 +982,7 @@
 (princ)
 )
 
+;For use in block editor. places all objects on "0" layer and saves and closes block editor.
 (defun c:bv()
 (c:a0)
 (command "bclose" "")
@@ -968,46 +1010,9 @@
 (princ)
 )
 
-;Load EdsLisp
-;You'll need to change the filename to be yours. If it doesn't work you might have to change the folder it's in to be in Autocad's searchable path? Or you might be able to get away with making the filename include the complete path. 
-(defun c:lel()
-(load "edslisp.lsp")
-(princ)
-)
 
 
-
-
-
-(defun C:P9 (/ I LW P1 P2 P3)
-                ;|
-*****************************************************************************************
-
-by ElpanovEvgeniy
-
-Замена линейного сегмента полилинии дуговым сегментом
-
-Впервые опубликована
-http://www.caduser.ru/cgi-bin/f1/board.cgi?t=20707ki
-
-Дата создания   19.09.2005
-Последняя редакция 04.06.2006
-*****************************************************************************************
-
-Replacement of a linear segment of a polyline with an arc segment
-
-For the first time it is published
-http://www.caduser.ru/cgi-bin/f1/board.cgi?t=20707ki
-
-Date of creation   19.09.2005
-Last edition       04.06.2006
-*****************************************************************************************
-
-
-(C:P9)
-
-*****************************************************************************************
-|;
+(defun C:P9(/ I LW P1 P2 P3)
  (vl-load-com)
  (or doc (setq doc (vla-get-ActiveDocument (vlax-get-acad-object))))
  (if (and (setq lw (entsel "\n Select segment in a polyline. "))
@@ -1039,19 +1044,6 @@ Last edition       04.06.2006
   (princ "\n It is select nothing or object not a polyline. ")
  ) ;_  if
 ) ;_  defun
-
-
-;change drawing units to decimal
-(defun c:dec()
-(command "-units" "2" "8" "1" "2" "0.00" "no")
-(princ)
-)
-
-;change drawing units to architectural
-(defun c:arch()
-(command "-units" "4" "32" "1" "2" "0.00" "no")
-(princ)
-)
 
 ;explode all groups
 (defun c:gn()
@@ -1089,12 +1081,6 @@ Last edition       04.06.2006
 (princ)
 )
 
-;delete current page layout
-(defun c:ld()
-(command "layout" "delete" "")
-(princ)
-)
-
 ;change a chosen layer to color 253
 (defun c:253()
 (setq c253 (getstring "What Layer?"))
@@ -1108,32 +1094,21 @@ Last edition       04.06.2006
 (princ)
 )
 
-(defun c:dp0()
-(c:dp)
-(command "point" "0,0,0")
-(command "bclose" "")
-(princ)
-)
-
 (defun c:lk()
 (command "zoom" "extents")
 (command "laywalk")
 (princ)
 )
 
-(defun c:sz()
-(setq zoom_center (getpoint "Pick Center"))
-(setq x_val (car zoom_center))
-(setq y_val (cadr zoom_center))
-(setq z_val (caddr zoom_center))
-(setq zoom_level (getstring "Zoom Height?"))
-(command "zoom" "center" (list x_val y_val)(list zoom_level))
+;start changeblock command
+(defun c:cb()
+(command "changeblock")
 (princ)
 )
 
-
-(defun c:ep()
+;selectsimilar and erase what was selected
+(defun c:se()
+(command "SELECTSIMILAR")
 (command "erase")
-(command "pasteclip")
 (princ)
 )
