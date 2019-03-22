@@ -1,7 +1,21 @@
 ;makes the fillet command work again
 (command "redefine" "fillet")
 
+;makes the selectsimilar command work again
+(command "redefine" "selectsimilar")
+
+;change layer to 0 then choose file to xref and insert at 0,0,0 and zoom to extents.
+(defun c:ix()
+	(command "filedia" "0")
+	(command "clayer" "0")
+	(command "-xref" "o" pause "0,0,0" "1" "1" "0")
+	(command "zoom" "extents")
+	(command "filedia" "1")
+(princ)
+)
+
 (defun c:dp0()
+(command "-bedit")
 (c:dp)
 (command "point" "0,0,0")
 (command "bclose" "")
@@ -106,6 +120,7 @@
 ;change current layer to 0
 ;save file, and close.
 (defun c:zc()
+(c:gn)
 (command "layerclose")
 (command "layon")
 (c:lockvp)
@@ -247,6 +262,7 @@
 (command "layon")
 (command "attdia" "1")
 (command "filedia" "1")
+(c:ret)
 (c:arch)
 (c:p0)
 (c:l0)
@@ -322,6 +338,19 @@
 (command "rotate" "all" "" "0,0,0" "90")
 (princ)
 )
+
+(defun c:r4()
+(command "rotate" (ssget)"" pause "90")
+(command "move" (command "select" pause) pause pause)
+(princ)
+)
+
+(defun c:r5()
+(command "rotate" (ssget)"" pause "270")
+(command "move" (command "select" pause) pause pause)
+(princ)
+)
+
 
 ;setup electrical layers purge all unused layers. purge all unused blocks. insert all the electrical common layers. insert the version of the kjg north arrow that i fixed.
 (defun c:sue()
@@ -832,7 +861,7 @@
 
 ;inserts block of electrical nots that allows e1 - e6 to work
 (defun c:we()
-(command "-insert" "*ElecNoteWheel-2.dwg" #nil)
+(command "-insert" "*ElecNoteWheel-2.dwg")
 (princ)
 )
 
@@ -1110,5 +1139,59 @@
 (defun c:se()
 (command "SELECTSIMILAR")
 (command "erase")
+(princ)
+)
+
+;detach all xrefs
+(defun c:det()
+(command "-xref" "detach" "*")
+(princ)
+)
+
+;detach seal/logos xref
+(defun c:dex()
+(command "-xref" "detach" "seal-logos")
+(princ)
+)
+
+;close xref pallet
+(defun c:cxr()
+(command "EXTERNALREFERENCESCLOSE")
+(princ)
+)
+
+;place everything at an elevation of "0"
+(defun c:0p()
+(command "change" "all" "" "properties" "elev" "0" "")
+(princ)
+)
+
+;SELECTSIMILAR
+(defun c:ss()
+(command "selectsimilar")
+(princ)
+)
+
+;Switch to Model Tab
+(defun c:mm()
+(command "model")
+(princ)
+)
+
+;Revcloud Command
+(defun c:rvc()
+(command "revcloud" "a" ".0625" ".1875" #nil)
+(command "revcloud" "object" (ssget) "no")
+(princ)
+)
+
+;Draw Window
+(defun c:dw()
+(command "osmode" "3")
+(command "clayer" "ab-window")
+(command "rectang" pause pause)
+(command "rectang" "@" pause)
+(command "clayer" "ab-wall")
+(c:65)
 (princ)
 )
