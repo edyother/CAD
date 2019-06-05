@@ -294,8 +294,9 @@
 )
 
 ;purge and set up new layers for as built drawing
-(defun c:asbl()
-	(command "-xref" "detach" "*")
+(defun c:asbl
+()
+	;(command "-xref" "detach" "*")
 	(command "-purge" "layers" "*" "no")
 	(command "-purge" "blocks" "*" "no")
 	(command "-layer" 
@@ -357,7 +358,7 @@
 	(command "-purge" "layers" "*" "no")
 	(command "-purge" "blocks" "*" "no")
 	(c:mz)
-	(command "insert" "elec common layers=elec common layers.dwg" "0,0,0" "1" "1" "0")
+	(command "insert" "elec common layers=elec common layers.dwg" #nil)
 	(command "insert" "kjg north arrow=kjg north arrow.dwg" #nil)
 	(command "insert" "h21=h21.dwg" #nil)
 	(command "insert" "c-notewheel=c-notewheel.dwg" #nil)
@@ -370,10 +371,19 @@
 	(command "-purge" "layers" "*" "no")
 	(command "-purge" "blocks" "*" "no")
 	(c:mz)
-	(command "insert" "IU_Electrical=IU_Electrical.dwg" "0,0,0" "1" "1" "0")
+	(command "insert" "IU_Electrical=IU_Electrical.dwg" #nil)
 	(command "insert" "kjg north arrow=kjg north arrow.dwg" #nil)
 	(command "insert" "h21=h21.dwg" #nil)
 	(command "insert" "c-notewheel=c-notewheel.dwg" #nil)
+(princ)
+)
+
+;setup elevation layers. purge all unused layers. purge all unused blocks. insert all the elevation layers.
+(defun c:elevla()
+	(command "-purge" "layers" "*" "no")
+	(command "-purge" "blocks" "*" "no")
+	(c:mz)
+	(command "insert" "eElevationLayers=ElevationLayers.dwg" #nil)
 (princ)
 )
 
@@ -390,6 +400,17 @@
 (command "erase" (ssget)"")
 (command "insert" "notespacing.dwg" "@" "1" "1" "0")
 (command "move" (ssget)"")
+(princ)
+)
+
+;move note spacing block
+(defun c:nb()
+(command "osmode" "1")
+(command "ucs" pause "")
+(command "erase" (ssget)"")
+(command "osmode" "0")
+(command "insert" "notespacing=notespacing.dwg" "0,0,0" "1" "1" "0")
+(command "osmode" "65")
 (princ)
 )
 
@@ -491,7 +512,8 @@
 
 ;change layer to g-anno-nplt and start mview command
 (defun c:vs()
-(command "clayer" "g-anno-nplt")
+(command "-layer" "new" "g-anno-nplt" "color" "4" "g-anno-nplt" "set" "g-anno-nplt" "")
+;(command "clayer" "g-anno-nplt")
 (command "mview")
 (princ)
 )
@@ -1094,7 +1116,7 @@
 
 ;choose a piece of text to be justified "left"
 (defun c:jl()
-(command "justifytext" pause pause "left")
+(command "justifytext" pause pause "tl")
 (princ)
 )
 
@@ -1150,7 +1172,7 @@
 
 ;detach seal/logos xref
 (defun c:dex()
-(command "-xref" "detach" "seal-logos")
+(command "-xref" "detach" "*seal-logos*")
 (princ)
 )
 
@@ -1163,6 +1185,13 @@
 ;place everything at an elevation of "0"
 (defun c:0p()
 (command "change" "all" "" "properties" "elev" "0" "")
+(princ)
+)
+
+;place everything at an elevation of "0" and close block editor
+(defun c:0p0()
+(command "change" "all" "" "properties" "elev" "0" "")
+(command "bclose" "")
 (princ)
 )
 
@@ -1185,6 +1214,13 @@
 (princ)
 )
 
+;Revcloud Command
+(defun c:rvcx()
+(command "revcloud" "a" ".25" ".75" #nil)
+(command "revcloud" "object" (ssget) "no")
+(princ)
+)
+
 ;Draw Window
 (defun c:dw()
 (command "osmode" "3")
@@ -1193,5 +1229,55 @@
 (command "rectang" "@" pause)
 (command "clayer" "ab-wall")
 (c:65)
+(princ)
+)
+
+;paste from clipboard at 90 degrees
+(defun c:x1()
+(command "pasteclip" "R" "90")
+(princ)
+)
+
+;paste from clipboard at 180 degrees
+(defun c:x2()
+(command "pasteclip" "R" "180")
+(princ)
+)
+
+;paste from clipboard at 270 degrees
+(defun c:x3()
+(command "pasteclip" "R" "270")
+(princ)
+)
+
+(defun c:fxb()
+(c:a0)
+(c:0p)
+(command "explode" "all" "")
+(command "justifytext" "all" "" "" "tl")
+(command "pasteclip" pause)
+(command "matchprop" pause)
+(princ)
+)
+
+;Block Editor
+(defun c:be()
+(command "-bedit")
+(princ)
+)
+
+;image attach
+(defun c:iat()
+(command "clayer" "0")
+(command "imageattach")
+(princ)
+)
+
+(defun c:ff()
+(command "fillet")
+)
+
+(defun c:wf()
+(command "wipeoutframe")
 (princ)
 )
