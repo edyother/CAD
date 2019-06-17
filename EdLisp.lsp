@@ -1268,7 +1268,7 @@
 
 ;image attach
 (defun c:iat()
-(command "clayer" "0")
+(command "clayer" "ab-image")
 (command "imageattach")
 (princ)
 )
