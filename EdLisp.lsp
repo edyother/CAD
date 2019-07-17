@@ -303,31 +303,36 @@
 		"new" "ab-image" 
 		"new" "ab-wall" 
 			"color" "80" "ab-wall" 
-		"new" "ab-dashed" 
-			"color" "1" "ab-dashed" 
-			"ltype" "hidden" "ab-dashed" 
+		"new" "ab-above" 
+			"color" "14" "ab-above" 
+			"ltype" "hidden" "ab-above" 
+		"new" "ab-below" 
+			"color" "10" "ab-below" 
+			"ltype" "hidden" "ab-below" 
 		"new" "ab-elec" 
-			"color" "210" "ab-elec" 
+			"color" "9" "ab-elec" 
 		"new" "ab-stair-rail" 
-			"color" "1" "ab-stair-rail" 
+			"color" "2" "ab-stair-rail" 
 		"new" "ab-door" 
 			"color" "1" "ab-door" 
 		"new" "ab-floor" 
-			"color" "1" "ab-floor" 
+			"color" "11" "ab-floor" 
 		"new" "ab-window" 
-			"color" "1" "ab-window" 
+			"color" "12" "ab-window" 
 		"new" "ab-roof" 
 			"color" "magenta" "ab-roof" 
 		"new" "ab-fixt" 
-			"color" "1" "ab-fixt"
+			"color" "190" "ab-fixt"
 		"new" "ab-column" 
-			"color" "cyan" "ab-column"
+			"color" "4" "ab-column"
 		"new" "ab-beam" 
-			"color" "1" "ab-beam"
+			"color" "13" "ab-beam"
 			"ltype" "center" "ab-beam"
 		"new" "ab-iden" 
 			"color" "4" "ab-iden"
 			"plot" "no" "ab-iden"
+		"new" "ab-anno" 
+			"color" "51" "ab-anno"
 	"")
 (command "clayer" "ab-wall")
 (command "insert" "kjg north arrow=kjg north arrow.dwg" #nil)
@@ -730,7 +735,8 @@
 
 ;set offset for door frames
 (defun c:o2()
-(command "offset" "erase" "yes" "2")
+(command "offset" "erase" "yes" "2" pause pause pause pause "")
+(c:o0)
 (princ)
 )
 
@@ -1279,5 +1285,36 @@
 
 (defun c:wf()
 (command "wipeoutframe")
+(princ)
+)
+
+(defun c:sb()
+(command "setbylayer" "yes" "yes")
+(princ)
+)
+
+(defun c:prg()
+(command "-purge" "all" "*" "no")
+(princ)
+)
+
+; 
+(defun c:tg()
+(setq pa (getpoint))
+(setq pb (getpoint))
+(setq p1 (trans pa 1 0))
+(setq p2 (trans pb 1 0))
+(command "ucs" "3p" p1 p2 "")
+(command "-insert" "TIC120_4" "0,0,0" "1" "1" "0")
+(command "ucs" "world")
+(princ)
+)
+
+(defun c:ty()
+(setq pb (getpoint))
+(setq pa (getpoint))
+(setq p1 (trans pa 1 0))
+(setq p2 (trans pb 1 0))
+(command "-insert" "TIC120_4" "r" p1 p2 p1 "1" "1" "0")
 (princ)
 )
