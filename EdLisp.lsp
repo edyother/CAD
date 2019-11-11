@@ -1318,3 +1318,111 @@
 (command "-insert" "TIC120_4" "r" p1 p2 p1 "1" "1" "0")
 (princ)
 )
+
+
+;set ucs and view to predetermined UCS named S1
+(defun c:s1()
+(command "ucs" "named" "restore" "s1")
+(command "plan" "current")
+(princ)
+)
+
+;starts Solidedit command
+(defun c:sed()
+(command "solidedit" "face" "extrude")
+(princ)
+)
+
+;Sets visual style to 2d Wireframe
+(defun c:2d()
+(command "-visualstyles" "c" "2")
+(princ)
+)
+
+;Sets visual style to 3d Hidden
+(defun c:3h()
+(command "-visualstyles" "c" "h")
+(princ)
+)
+
+;Sets all the xref layer colors to 250
+(defun c:x25()
+(command "-layer" "color" "250" "*|*" )
+(princ)
+)
+
+;Sets the grid and snap for lining up electrical sheet notes
+(defun c:tset()
+(command "snap" "aspect" ".3" ".05")
+(command "grid" "aspect" ".3" ".05")
+(princ)
+)
+
+;turns off grid and snap and sets Osnap back to 6591
+(defun c:trt()
+(command "snap" "off")
+(command "grid" "off")
+(c:65)
+(princ)
+)
+
+;starts REFEDIT, moves everything to 0 elevation and closes REFEDIT
+(defun c:r0()
+(command "refedit")
+(c:0p)
+(command "refclose" )
+(princ)
+)
+
+(defun c:bb()
+(command "_pasteblock" "@" )
+(princ)
+)
+
+(defun c:at()
+(command "attsync" "select" pause )
+(princ)
+)
+
+;draws a door on the AB-Door layer by picking the two corners of the door opening
+(defun c:fd()
+(command "clayer" "ab-door")
+(command "osmode" "1")
+(setq pa (getpoint))
+(setq pb (getpoint))
+(setq p1 (trans pa 1 0))
+(setq p2 (trans pb 1 0))
+(setq r1 (distance p1 p2))
+(setq p3 (list 0 r1))
+(setq p4 (list r1 0))
+(setq p5 (list p4 2 0))
+(command "ucs" "3p" p1 p2 "")
+(command "rectangle" "0,0" (list 2 r1))
+(command "mirror" (entlast) "m2p" "0,0" p4 "@0,1" )
+(command "arc" p4 "c" "0,0" "angle" "90")
+(command "mirror" (entlast) "m2p" "0,0" p4 "@0,1" )
+(command "osmode" "6591")
+(command "ucs" "world")
+(command "clayer" "ab-wall")
+(princ)
+)
+
+;inserts door frame blocks into door openings
+(defun c:ffd()
+(command "clayer" "ab-door")
+(command "osmode" "2")
+(setq pa (getpoint))
+(setq pb (getpoint))
+(setq p1 (trans pa 1 0))
+(setq p2 (trans pb 1 0))
+(setq r1 (distance p1 p2))
+(setq p3 (list 0 r1))
+(setq p4 (list r1 0))
+(command "ucs" "3p" p1 p2 )
+(command "-insert" "HM_FRAME" "0,0,0" 1 1 0)
+(command "mirror" (entlast) "m2p" "0,0" p4 "@0,1" )
+(command "osmode" "6591")
+(command "ucs" "world")
+(command "clayer" "ab-wall")
+(princ)
+)
