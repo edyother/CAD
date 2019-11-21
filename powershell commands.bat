@@ -9,10 +9,10 @@ dir /b /o >output.txt
 #convert flv files from OBS to mp4
 .\ff\bin\ffmpeg.exe -i input.flv -c copy -copyts output.mp4
 
-#Recursivly list files without path
+#Recursively list files without path
 forfiles /m FileNameQuery /s >output.csv
 
-#Recursivly list all the folders in the entire server into a text file
+#Recursively list all the folders in the entire server into a text file
 
 dir -directory -r >'C:\Users\Ed Yother\Temp\ServerDirectoryList.txt'
 
@@ -31,6 +31,8 @@ dir | Rename-item -NewName {$_.name -replace '_4','_1.20'}
 dir | Rename-item -NewName {$_.name -replace '_4','_1.16'}
 dir | Rename-item -NewName {$_.name -replace '_4','_1.32'}
 dir | Rename-item -NewName {$_.name -replace "-NUMBER-","C2019020"}
+dir | Rename-item -NewName {$_.name -replace "P-NUM","C2019060"}
+dir | Rename-item -NewName {$_.name -replace "P-NUM","A2019063"}
 
 dir | Rename-item -NewName {$_.name -replace '__','_'}
 
@@ -40,3 +42,6 @@ dir | Rename-item -NewName {$_.name -replace '4','_4'}
 dir | Rename-item -NewName {$_.name -replace '8','_8'}
 dir | Rename-item -NewName {$_.name -replace '32','_32'}
 dir | Rename-item -NewName {$_.name -replace '1.20','_1.20'}
+
+
+

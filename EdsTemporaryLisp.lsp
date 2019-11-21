@@ -114,3 +114,23 @@
 ;(command "wipeoutframe" "0")(c:zc)
 
 ; *A-Flor-TPar
+
+;(command "-layer" "color" "253" "lnwk column grid*|*" "")(princ)
+
+;(command "-layer" "color" "4" "*|*anno-temp*" "")(princ)
+
+;"*temp 1-4"
+
+;(command "wipeoutframe" "0")(c:zc)
+
+;(command "-layer" "color" "253" "*patt" "")(c:zc)
+
+;(c:00)
+
+;(command "-layer" "off" "*" "y" "on" "*rev*" "")(princ)
+
+;(command "-layer" "color" "250" "*|*" "")(princ)
+
+;(c:pe1)(c:zc)
+
+
