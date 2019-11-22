@@ -1443,3 +1443,11 @@
 (command "pspace")
 (princ)
 )
+
+(defun c:w2()
+(c:be)
+(command "erase" "all" "")
+(c:00)
+(command "bclose" "")
+(princ)
+)
