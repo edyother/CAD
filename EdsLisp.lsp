@@ -69,6 +69,7 @@
 (princ)
 )
 
+;sets grid snap for 2' squares
 (defun c:gg()
 (command "osmode" "0")
 (command "autosnap" "0")
@@ -77,6 +78,7 @@
 (princ)
 )
 
+;sets grid snap for 1' squares
 (defun c:gh()
 (command "osmode" "0")
 (command "autosnap" "0")
@@ -1449,5 +1451,85 @@
 (command "erase" "all" "")
 (c:00)
 (command "bclose" "")
+(princ)
+)
+
+(defun c:ll()
+(command "laymcur")
+(princ)
+)
+
+(defun c:ca()
+(command "COPYBLOCKDEFANDASSIGN")
+(princ)
+)
+
+(defun c:cc()
+(command "copy")
+(princ)
+)
+
+(defun c:xt()
+(command "XCLIPFRAMETOGGLE")
+(princ)
+)
+
+(defun c:ds()
+(command "dist")
+(princ)
+)
+
+(defun c:lc()
+(command "layerclose")
+(princ)
+)
+
+(defun c:cs()
+(command "ucs")
+(princ)
+)
+
+(defun c:ln()
+(command "-layer" "on" "*" "")
+(princ)
+)
+
+(defun c:ch()
+(command "chspace")
+(princ)
+)
+
+(defun c:qs()
+(command "qselect")
+(princ) 
+)
+
+(defun c:re()
+(command "refedit")
+(princ)
+)
+
+(defun c:rc()
+(command "refclose")
+(princ)
+)
+
+(defun c:lf()
+(command "layoff")
+(princ)
+)
+
+(defun c:blo()
+(command "blockreplace")
+(princ)
+)
+
+(defun c:t()
+(command "trim")
+(princ)
+)
+
+(defun c:xx()
+(command "xline")
 (princ)
 )
